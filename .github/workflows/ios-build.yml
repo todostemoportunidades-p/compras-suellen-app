@@ -30,8 +30,10 @@ jobs:
       - name: Build iOS App
         run: |
           cd ios/App
-          xcodebuild -project App.xcodeproj -scheme App -sdk iphoneos -configuration Debug -allowProvisioningUpdates build
-        # Nota: Debug build sem assinatura para teste em simulador ou AltStore
+          xcodebuild -project App.xcodeproj -scheme App -sdk iphoneos -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            build
+        # Nota: Build sem assinatura (precisa de AltStore/Sideloadly para instalar)
         
       - name: Upload IPA
         uses: actions/upload-artifact@v4
