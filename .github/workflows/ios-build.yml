@@ -35,8 +35,21 @@ jobs:
             build
         # Nota: Build sem assinatura (precisa de AltStore/Sideloadly para instalar)
         
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          # Encontrar o .app gerado no diretorio de build padrão do xcodebuild
+          APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            # Se não achar no DerivedData, tenta no diretorio local (fallback)
+            APP_PATH=$(find . -name "*.app" | head -n 1)
+          fi
+          echo "Packing $APP_PATH"
+          cp -r "$APP_PATH" Payload/
+          zip -r ComprasSuellen.ipa Payload
+          
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: ComprasSuellen-iOS
-          path: ios/App/build/Release-iphoneos/*.app
+          name: ComprasSuellen-iOS-IPA
+          path: ComprasSuellen.ipa
