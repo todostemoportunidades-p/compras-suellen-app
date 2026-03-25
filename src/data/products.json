@@ -1,0 +1,2666 @@
+[
+  {
+    "id": 1,
+    "name": "Banana Prata",
+    "category": "Hortifruti",
+    "nagumoPrice": 6.91,
+    "higasPrice": 7.24,
+    "unit": "kg"
+  },
+  {
+    "id": 2,
+    "name": "Banana Maçã",
+    "category": "Hortifruti",
+    "nagumoPrice": 9.5,
+    "higasPrice": 8.99,
+    "unit": "kg"
+  },
+  {
+    "id": 3,
+    "name": "Banana Nanica",
+    "category": "Hortifruti",
+    "nagumoPrice": 6.14,
+    "higasPrice": 6.26,
+    "unit": "kg"
+  },
+  {
+    "id": 4,
+    "name": "Banana da Terra",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.29,
+    "higasPrice": 10.57,
+    "unit": "kg"
+  },
+  {
+    "id": 5,
+    "name": "Banana Ouro",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.52,
+    "higasPrice": 11.03,
+    "unit": "kg"
+  },
+  {
+    "id": 6,
+    "name": "Maçã Gala",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.89,
+    "higasPrice": 10.68,
+    "unit": "kg"
+  },
+  {
+    "id": 7,
+    "name": "Maçã Fuji",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.78,
+    "higasPrice": 10.78,
+    "unit": "kg"
+  },
+  {
+    "id": 8,
+    "name": "Maçã Verde",
+    "category": "Hortifruti",
+    "nagumoPrice": 14.95,
+    "higasPrice": 14.7,
+    "unit": "kg"
+  },
+  {
+    "id": 9,
+    "name": "Maçã Argentina",
+    "category": "Hortifruti",
+    "nagumoPrice": 13.83,
+    "higasPrice": 14.13,
+    "unit": "kg"
+  },
+  {
+    "id": 10,
+    "name": "Pera Williams",
+    "category": "Hortifruti",
+    "nagumoPrice": 14.54,
+    "higasPrice": 14.64,
+    "unit": "kg"
+  },
+  {
+    "id": 11,
+    "name": "Pera Portuguesa",
+    "category": "Hortifruti",
+    "nagumoPrice": 18.42,
+    "higasPrice": 16.32,
+    "unit": "kg"
+  },
+  {
+    "id": 12,
+    "name": "Uva Thompson (Sem Semente)",
+    "category": "Hortifruti",
+    "nagumoPrice": 15.24,
+    "higasPrice": 14.9,
+    "unit": "un"
+  },
+  {
+    "id": 13,
+    "name": "Uva Crimson (Sem Semente)",
+    "category": "Hortifruti",
+    "nagumoPrice": 15.43,
+    "higasPrice": 16.95,
+    "unit": "un"
+  },
+  {
+    "id": 14,
+    "name": "Uva Niágara",
+    "category": "Hortifruti",
+    "nagumoPrice": 9.63,
+    "higasPrice": 8.98,
+    "unit": "un"
+  },
+  {
+    "id": 15,
+    "name": "Uva Itália",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.8,
+    "higasPrice": 9.61,
+    "unit": "un"
+  },
+  {
+    "id": 16,
+    "name": "Mamão Papaya",
+    "category": "Hortifruti",
+    "nagumoPrice": 6.94,
+    "higasPrice": 7.52,
+    "unit": "un"
+  },
+  {
+    "id": 17,
+    "name": "Mamão Formosa",
+    "category": "Hortifruti",
+    "nagumoPrice": 8.15,
+    "higasPrice": 7.62,
+    "unit": "kg"
+  },
+  {
+    "id": 18,
+    "name": "Melão Amarelo",
+    "category": "Hortifruti",
+    "nagumoPrice": 6.46,
+    "higasPrice": 6.58,
+    "unit": "kg"
+  },
+  {
+    "id": 19,
+    "name": "Melão Pele de Sapo",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.92,
+    "higasPrice": 8.23,
+    "unit": "kg"
+  },
+  {
+    "id": 20,
+    "name": "Melancia Inteira",
+    "category": "Hortifruti",
+    "nagumoPrice": 2.38,
+    "higasPrice": 2.38,
+    "unit": "kg"
+  },
+  {
+    "id": 21,
+    "name": "Melancia Baby",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.66,
+    "higasPrice": 4.46,
+    "unit": "kg"
+  },
+  {
+    "id": 22,
+    "name": "Laranja Pêra",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.9,
+    "higasPrice": 4.49,
+    "unit": "kg"
+  },
+  {
+    "id": 23,
+    "name": "Laranja Bahia",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.94,
+    "higasPrice": 5.7,
+    "unit": "kg"
+  },
+  {
+    "id": 24,
+    "name": "Laranja Lima",
+    "category": "Hortifruti",
+    "nagumoPrice": 6.79,
+    "higasPrice": 6.93,
+    "unit": "kg"
+  },
+  {
+    "id": 25,
+    "name": "Laranja para Suco",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.71,
+    "higasPrice": 3.35,
+    "unit": "kg"
+  },
+  {
+    "id": 26,
+    "name": "Limão Taiti",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.92,
+    "higasPrice": 3.94,
+    "unit": "kg"
+  },
+  {
+    "id": 27,
+    "name": "Limão Siciliano",
+    "category": "Hortifruti",
+    "nagumoPrice": 12.56,
+    "higasPrice": 13.59,
+    "unit": "kg"
+  },
+  {
+    "id": 28,
+    "name": "Limão Cravo",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.25,
+    "higasPrice": 5.61,
+    "unit": "kg"
+  },
+  {
+    "id": 29,
+    "name": "Morango",
+    "category": "Hortifruti",
+    "nagumoPrice": 9.67,
+    "higasPrice": 9.12,
+    "unit": "un"
+  },
+  {
+    "id": 30,
+    "name": "Abacaxi Pérola",
+    "category": "Hortifruti",
+    "nagumoPrice": 6.67,
+    "higasPrice": 7.12,
+    "unit": "un"
+  },
+  {
+    "id": 31,
+    "name": "Abacaxi Hawaí",
+    "category": "Hortifruti",
+    "nagumoPrice": 8.07,
+    "higasPrice": 7.85,
+    "unit": "un"
+  },
+  {
+    "id": 32,
+    "name": "Abacate Geada",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.04,
+    "higasPrice": 7.58,
+    "unit": "kg"
+  },
+  {
+    "id": 33,
+    "name": "Avocado",
+    "category": "Hortifruti",
+    "nagumoPrice": 19.28,
+    "higasPrice": 18.51,
+    "unit": "kg"
+  },
+  {
+    "id": 34,
+    "name": "Manga Palmer",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.68,
+    "higasPrice": 7.15,
+    "unit": "kg"
+  },
+  {
+    "id": 35,
+    "name": "Manga Tommy",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.82,
+    "higasPrice": 5.98,
+    "unit": "kg"
+  },
+  {
+    "id": 36,
+    "name": "Manga Espada",
+    "category": "Hortifruti",
+    "nagumoPrice": 8.73,
+    "higasPrice": 7.81,
+    "unit": "kg"
+  },
+  {
+    "id": 37,
+    "name": "Maracujá Azedo",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.68,
+    "higasPrice": 9.72,
+    "unit": "kg"
+  },
+  {
+    "id": 38,
+    "name": "Maracujá Doce",
+    "category": "Hortifruti",
+    "nagumoPrice": 16.45,
+    "higasPrice": 14.56,
+    "unit": "kg"
+  },
+  {
+    "id": 39,
+    "name": "Goiaba Vermelha",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.88,
+    "higasPrice": 8.14,
+    "unit": "kg"
+  },
+  {
+    "id": 40,
+    "name": "Goiaba Branca",
+    "category": "Hortifruti",
+    "nagumoPrice": 8.51,
+    "higasPrice": 8.6,
+    "unit": "kg"
+  },
+  {
+    "id": 41,
+    "name": "Kiwi Importado",
+    "category": "Hortifruti",
+    "nagumoPrice": 23.02,
+    "higasPrice": 22.82,
+    "unit": "kg"
+  },
+  {
+    "id": 42,
+    "name": "Caju",
+    "category": "Hortifruti",
+    "nagumoPrice": 12.64,
+    "higasPrice": 12.33,
+    "unit": "kg"
+  },
+  {
+    "id": 43,
+    "name": "Caqui Rama Forte",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.88,
+    "higasPrice": 11.65,
+    "unit": "kg"
+  },
+  {
+    "id": 44,
+    "name": "Pêssego Nacional",
+    "category": "Hortifruti",
+    "nagumoPrice": 13.75,
+    "higasPrice": 14.18,
+    "unit": "kg"
+  },
+  {
+    "id": 45,
+    "name": "Ameixa Nacional",
+    "category": "Hortifruti",
+    "nagumoPrice": 12.03,
+    "higasPrice": 13.21,
+    "unit": "kg"
+  },
+  {
+    "id": 46,
+    "name": "Figo",
+    "category": "Hortifruti",
+    "nagumoPrice": 18.52,
+    "higasPrice": 18.16,
+    "unit": "un"
+  },
+  {
+    "id": 47,
+    "name": "Batata Inglesa Miúda",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.26,
+    "higasPrice": 5.03,
+    "unit": "kg"
+  },
+  {
+    "id": 48,
+    "name": "Batata Inglesa Especial",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.54,
+    "higasPrice": 6.7,
+    "unit": "kg"
+  },
+  {
+    "id": 49,
+    "name": "Batata Asterix",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.51,
+    "higasPrice": 7.67,
+    "unit": "kg"
+  },
+  {
+    "id": 50,
+    "name": "Batata Doce Branca",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.88,
+    "higasPrice": 4.84,
+    "unit": "kg"
+  },
+  {
+    "id": 51,
+    "name": "Batata Doce Roxa",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.25,
+    "higasPrice": 5.43,
+    "unit": "kg"
+  },
+  {
+    "id": 52,
+    "name": "Batata Baroa (Mandioquinha)",
+    "category": "Hortifruti",
+    "nagumoPrice": 15.09,
+    "higasPrice": 14.86,
+    "unit": "kg"
+  },
+  {
+    "id": 53,
+    "name": "Cebola Nacional",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.83,
+    "higasPrice": 5.85,
+    "unit": "kg"
+  },
+  {
+    "id": 54,
+    "name": "Cebola Roxa",
+    "category": "Hortifruti",
+    "nagumoPrice": 8.36,
+    "higasPrice": 8.24,
+    "unit": "kg"
+  },
+  {
+    "id": 55,
+    "name": "Alho a granel",
+    "category": "Hortifruti",
+    "nagumoPrice": 31,
+    "higasPrice": 27.75,
+    "unit": "kg"
+  },
+  {
+    "id": 56,
+    "name": "Alho Descascado Pote",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.08,
+    "higasPrice": 10.68,
+    "unit": "un"
+  },
+  {
+    "id": 57,
+    "name": "Tomate Carmem",
+    "category": "Hortifruti",
+    "nagumoPrice": 8.51,
+    "higasPrice": 8.24,
+    "unit": "kg"
+  },
+  {
+    "id": 58,
+    "name": "Tomate Italiano",
+    "category": "Hortifruti",
+    "nagumoPrice": 10.37,
+    "higasPrice": 9.76,
+    "unit": "kg"
+  },
+  {
+    "id": 59,
+    "name": "Tomate Cereja / Sweet Grape",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.29,
+    "higasPrice": 5.6,
+    "unit": "un"
+  },
+  {
+    "id": 60,
+    "name": "Cenoura",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.14,
+    "higasPrice": 5.18,
+    "unit": "kg"
+  },
+  {
+    "id": 61,
+    "name": "Beterraba",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.42,
+    "higasPrice": 4.52,
+    "unit": "kg"
+  },
+  {
+    "id": 62,
+    "name": "Chuchu",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.19,
+    "higasPrice": 3.12,
+    "unit": "kg"
+  },
+  {
+    "id": 63,
+    "name": "Abobrinha Italiana",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.76,
+    "higasPrice": 5,
+    "unit": "kg"
+  },
+  {
+    "id": 64,
+    "name": "Abobrinha Menina",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.71,
+    "higasPrice": 6.01,
+    "unit": "kg"
+  },
+  {
+    "id": 65,
+    "name": "Pepino Japonês",
+    "category": "Hortifruti",
+    "nagumoPrice": 6.53,
+    "higasPrice": 6.48,
+    "unit": "kg"
+  },
+  {
+    "id": 66,
+    "name": "Pepino Caipira",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.29,
+    "higasPrice": 4.08,
+    "unit": "kg"
+  },
+  {
+    "id": 67,
+    "name": "Beringela",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.83,
+    "higasPrice": 6.03,
+    "unit": "kg"
+  },
+  {
+    "id": 68,
+    "name": "Pimentão Verde",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.69,
+    "higasPrice": 6.9,
+    "unit": "kg"
+  },
+  {
+    "id": 69,
+    "name": "Pimentão Amarelo",
+    "category": "Hortifruti",
+    "nagumoPrice": 14.64,
+    "higasPrice": 15.47,
+    "unit": "kg"
+  },
+  {
+    "id": 70,
+    "name": "Pimentão Vermelho",
+    "category": "Hortifruti",
+    "nagumoPrice": 15.69,
+    "higasPrice": 16.49,
+    "unit": "kg"
+  },
+  {
+    "id": 71,
+    "name": "Mandioca (Macaxeira) com casca",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.13,
+    "higasPrice": 3.93,
+    "unit": "kg"
+  },
+  {
+    "id": 72,
+    "name": "Mandioca Descascada",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.24,
+    "higasPrice": 6.66,
+    "unit": "un"
+  },
+  {
+    "id": 73,
+    "name": "Inhame",
+    "category": "Hortifruti",
+    "nagumoPrice": 9.45,
+    "higasPrice": 9.15,
+    "unit": "kg"
+  },
+  {
+    "id": 74,
+    "name": "Cará",
+    "category": "Hortifruti",
+    "nagumoPrice": 8.18,
+    "higasPrice": 8.51,
+    "unit": "kg"
+  },
+  {
+    "id": 75,
+    "name": "Abóbora Cabotiá",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.68,
+    "higasPrice": 3.36,
+    "unit": "kg"
+  },
+  {
+    "id": 76,
+    "name": "Abóbora Paulistinha",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.47,
+    "higasPrice": 4.86,
+    "unit": "kg"
+  },
+  {
+    "id": 77,
+    "name": "Quiabo",
+    "category": "Hortifruti",
+    "nagumoPrice": 13.31,
+    "higasPrice": 13.57,
+    "unit": "kg"
+  },
+  {
+    "id": 78,
+    "name": "Jiló",
+    "category": "Hortifruti",
+    "nagumoPrice": 9.88,
+    "higasPrice": 9.03,
+    "unit": "kg"
+  },
+  {
+    "id": 79,
+    "name": "Vagem Macarrão",
+    "category": "Hortifruti",
+    "nagumoPrice": 9.17,
+    "higasPrice": 10.44,
+    "unit": "kg"
+  },
+  {
+    "id": 80,
+    "name": "Repolho Verde",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.45,
+    "higasPrice": 3.58,
+    "unit": "kg"
+  },
+  {
+    "id": 81,
+    "name": "Repolho Roxo",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.34,
+    "higasPrice": 4.96,
+    "unit": "kg"
+  },
+  {
+    "id": 82,
+    "name": "Couve-Flor",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.73,
+    "higasPrice": 7.96,
+    "unit": "un"
+  },
+  {
+    "id": 83,
+    "name": "Brócolis Ninja",
+    "category": "Hortifruti",
+    "nagumoPrice": 7.23,
+    "higasPrice": 7.61,
+    "unit": "un"
+  },
+  {
+    "id": 84,
+    "name": "Brócolis Comum",
+    "category": "Hortifruti",
+    "nagumoPrice": 5.76,
+    "higasPrice": 5.7,
+    "unit": "un"
+  },
+  {
+    "id": 85,
+    "name": "Alface Lisa",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.7,
+    "higasPrice": 3.56,
+    "unit": "un"
+  },
+  {
+    "id": 86,
+    "name": "Alface Crespa",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.5,
+    "higasPrice": 3.45,
+    "unit": "un"
+  },
+  {
+    "id": 87,
+    "name": "Alface Americana",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.51,
+    "higasPrice": 4.5,
+    "unit": "un"
+  },
+  {
+    "id": 88,
+    "name": "Rúcula",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.61,
+    "higasPrice": 3.46,
+    "unit": "un"
+  },
+  {
+    "id": 89,
+    "name": "Agrião",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.16,
+    "higasPrice": 4.15,
+    "unit": "un"
+  },
+  {
+    "id": 90,
+    "name": "Couve Manteiga Maço",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.68,
+    "higasPrice": 3.42,
+    "unit": "un"
+  },
+  {
+    "id": 91,
+    "name": "Espinafre",
+    "category": "Hortifruti",
+    "nagumoPrice": 4.78,
+    "higasPrice": 4.29,
+    "unit": "un"
+  },
+  {
+    "id": 92,
+    "name": "Salsa e Cebolinha (Cheiro Verde)",
+    "category": "Hortifruti",
+    "nagumoPrice": 2.65,
+    "higasPrice": 2.39,
+    "unit": "un"
+  },
+  {
+    "id": 93,
+    "name": "Coentro",
+    "category": "Hortifruti",
+    "nagumoPrice": 2.45,
+    "higasPrice": 2.41,
+    "unit": "un"
+  },
+  {
+    "id": 94,
+    "name": "Hortelã",
+    "category": "Hortifruti",
+    "nagumoPrice": 2.94,
+    "higasPrice": 3.05,
+    "unit": "un"
+  },
+  {
+    "id": 95,
+    "name": "Manjericão",
+    "category": "Hortifruti",
+    "nagumoPrice": 3.17,
+    "higasPrice": 2.96,
+    "unit": "un"
+  },
+  {
+    "id": 96,
+    "name": "Picanha Bovina Peça/Kg",
+    "category": "Açougue",
+    "nagumoPrice": 67.01,
+    "higasPrice": 69.7,
+    "unit": "kg"
+  },
+  {
+    "id": 97,
+    "name": "Picanha Fatiada Kg",
+    "category": "Açougue",
+    "nagumoPrice": 82.96,
+    "higasPrice": 77.34,
+    "unit": "kg"
+  },
+  {
+    "id": 98,
+    "name": "Contra Filé (Bife)",
+    "category": "Açougue",
+    "nagumoPrice": 52.67,
+    "higasPrice": 52.05,
+    "unit": "kg"
+  },
+  {
+    "id": 99,
+    "name": "Contra Filé (Peça)",
+    "category": "Açougue",
+    "nagumoPrice": 44.94,
+    "higasPrice": 44.8,
+    "unit": "kg"
+  },
+  {
+    "id": 100,
+    "name": "Alcatra Bovina Inteira",
+    "category": "Açougue",
+    "nagumoPrice": 49.12,
+    "higasPrice": 45.71,
+    "unit": "kg"
+  },
+  {
+    "id": 101,
+    "name": "Maminha Bovinia",
+    "category": "Açougue",
+    "nagumoPrice": 46.23,
+    "higasPrice": 45.6,
+    "unit": "kg"
+  },
+  {
+    "id": 102,
+    "name": "Fraldinha",
+    "category": "Açougue",
+    "nagumoPrice": 41.66,
+    "higasPrice": 41.32,
+    "unit": "kg"
+  },
+  {
+    "id": 103,
+    "name": "Patinho",
+    "category": "Açougue",
+    "nagumoPrice": 41.41,
+    "higasPrice": 41.02,
+    "unit": "kg"
+  },
+  {
+    "id": 104,
+    "name": "Coxão Mole",
+    "category": "Açougue",
+    "nagumoPrice": 41.46,
+    "higasPrice": 40.96,
+    "unit": "kg"
+  },
+  {
+    "id": 105,
+    "name": "Coxão Duro",
+    "category": "Açougue",
+    "nagumoPrice": 39.1,
+    "higasPrice": 35.41,
+    "unit": "kg"
+  },
+  {
+    "id": 106,
+    "name": "Lagarto Bovino",
+    "category": "Açougue",
+    "nagumoPrice": 39.17,
+    "higasPrice": 40.59,
+    "unit": "kg"
+  },
+  {
+    "id": 107,
+    "name": "Acém (Peça)",
+    "category": "Açougue",
+    "nagumoPrice": 32.29,
+    "higasPrice": 29.99,
+    "unit": "kg"
+  },
+  {
+    "id": 108,
+    "name": "Carne Moída (Acém)",
+    "category": "Açougue",
+    "nagumoPrice": 30.68,
+    "higasPrice": 28.56,
+    "unit": "kg"
+  },
+  {
+    "id": 109,
+    "name": "Carne Moída (Patinho)",
+    "category": "Açougue",
+    "nagumoPrice": 39.6,
+    "higasPrice": 41.55,
+    "unit": "kg"
+  },
+  {
+    "id": 110,
+    "name": "Músculo Bovino",
+    "category": "Açougue",
+    "nagumoPrice": 28.7,
+    "higasPrice": 28.4,
+    "unit": "kg"
+  },
+  {
+    "id": 111,
+    "name": "Costela Bovina (Ripa)",
+    "category": "Açougue",
+    "nagumoPrice": 24.19,
+    "higasPrice": 25.86,
+    "unit": "kg"
+  },
+  {
+    "id": 112,
+    "name": "Costela Bovina (Minga)",
+    "category": "Açougue",
+    "nagumoPrice": 26.06,
+    "higasPrice": 27.55,
+    "unit": "kg"
+  },
+  {
+    "id": 113,
+    "name": "Cupim Bovino",
+    "category": "Açougue",
+    "nagumoPrice": 37.85,
+    "higasPrice": 35.49,
+    "unit": "kg"
+  },
+  {
+    "id": 114,
+    "name": "Fígado Bovino",
+    "category": "Açougue",
+    "nagumoPrice": 20.87,
+    "higasPrice": 20.6,
+    "unit": "kg"
+  },
+  {
+    "id": 115,
+    "name": "Coração Bovino",
+    "category": "Açougue",
+    "nagumoPrice": 18.24,
+    "higasPrice": 17.99,
+    "unit": "kg"
+  },
+  {
+    "id": 116,
+    "name": "Frango Inteiro Congelado",
+    "category": "Açougue",
+    "nagumoPrice": 10.59,
+    "higasPrice": 11.17,
+    "unit": "kg"
+  },
+  {
+    "id": 117,
+    "name": "Frango Inteiro Resfriado",
+    "category": "Açougue",
+    "nagumoPrice": 13.24,
+    "higasPrice": 12.62,
+    "unit": "kg"
+  },
+  {
+    "id": 118,
+    "name": "Peito de Frango (com osso)",
+    "category": "Açougue",
+    "nagumoPrice": 14.66,
+    "higasPrice": 15.61,
+    "unit": "kg"
+  },
+  {
+    "id": 119,
+    "name": "Filé de Peito de Frango (Sassami)",
+    "category": "Açougue",
+    "nagumoPrice": 21.23,
+    "higasPrice": 21.85,
+    "unit": "kg"
+  },
+  {
+    "id": 120,
+    "name": "Filé de Peito de Frango",
+    "category": "Açougue",
+    "nagumoPrice": 19.81,
+    "higasPrice": 20.02,
+    "unit": "kg"
+  },
+  {
+    "id": 121,
+    "name": "Coxa de Frango",
+    "category": "Açougue",
+    "nagumoPrice": 16.1,
+    "higasPrice": 14.24,
+    "unit": "kg"
+  },
+  {
+    "id": 122,
+    "name": "Sobrecoxa de Frango",
+    "category": "Açougue",
+    "nagumoPrice": 17.25,
+    "higasPrice": 15.31,
+    "unit": "kg"
+  },
+  {
+    "id": 123,
+    "name": "Coxa com Sobrecoxa",
+    "category": "Açougue",
+    "nagumoPrice": 13.65,
+    "higasPrice": 13.4,
+    "unit": "kg"
+  },
+  {
+    "id": 124,
+    "name": "Asa de Frango (Inteira)",
+    "category": "Açougue",
+    "nagumoPrice": 19.43,
+    "higasPrice": 19.98,
+    "unit": "kg"
+  },
+  {
+    "id": 125,
+    "name": "Tulipa de Frango (Meio da Asa)",
+    "category": "Açougue",
+    "nagumoPrice": 24.84,
+    "higasPrice": 23.82,
+    "unit": "kg"
+  },
+  {
+    "id": 126,
+    "name": "Coxinha da Asa",
+    "category": "Açougue",
+    "nagumoPrice": 20.15,
+    "higasPrice": 21.33,
+    "unit": "kg"
+  },
+  {
+    "id": 127,
+    "name": "Coração de Frango",
+    "category": "Açougue",
+    "nagumoPrice": 31.43,
+    "higasPrice": 31.42,
+    "unit": "kg"
+  },
+  {
+    "id": 128,
+    "name": "Moela de Frango",
+    "category": "Açougue",
+    "nagumoPrice": 11.59,
+    "higasPrice": 12.22,
+    "unit": "kg"
+  },
+  {
+    "id": 129,
+    "name": "Fígado de Frango",
+    "category": "Açougue",
+    "nagumoPrice": 10,
+    "higasPrice": 10.24,
+    "unit": "kg"
+  },
+  {
+    "id": 130,
+    "name": "Pernil Suíno (Com osso)",
+    "category": "Açougue",
+    "nagumoPrice": 19.92,
+    "higasPrice": 20.42,
+    "unit": "kg"
+  },
+  {
+    "id": 131,
+    "name": "Pernil Suíno (Sem osso)",
+    "category": "Açougue",
+    "nagumoPrice": 23.49,
+    "higasPrice": 24.21,
+    "unit": "kg"
+  },
+  {
+    "id": 132,
+    "name": "Lombo Suíno",
+    "category": "Açougue",
+    "nagumoPrice": 25.76,
+    "higasPrice": 24.89,
+    "unit": "kg"
+  },
+  {
+    "id": 133,
+    "name": "Costela Suína",
+    "category": "Açougue",
+    "nagumoPrice": 29.73,
+    "higasPrice": 29.14,
+    "unit": "kg"
+  },
+  {
+    "id": 134,
+    "name": "Bisteca Suína",
+    "category": "Açougue",
+    "nagumoPrice": 20.63,
+    "higasPrice": 21.15,
+    "unit": "kg"
+  },
+  {
+    "id": 135,
+    "name": "Copa Lombo",
+    "category": "Açougue",
+    "nagumoPrice": 29.21,
+    "higasPrice": 27.4,
+    "unit": "kg"
+  },
+  {
+    "id": 136,
+    "name": "Panceta Suína",
+    "category": "Açougue",
+    "nagumoPrice": 30.79,
+    "higasPrice": 29.74,
+    "unit": "kg"
+  },
+  {
+    "id": 137,
+    "name": "Toucinho / Pele",
+    "category": "Açougue",
+    "nagumoPrice": 13.57,
+    "higasPrice": 14.15,
+    "unit": "kg"
+  },
+  {
+    "id": 138,
+    "name": "Bacon de Barriga (Peça)",
+    "category": "Açougue",
+    "nagumoPrice": 37.01,
+    "higasPrice": 39.65,
+    "unit": "kg"
+  },
+  {
+    "id": 139,
+    "name": "Bacon em Cubos/Fatiado 200g",
+    "category": "Açougue",
+    "nagumoPrice": 11.93,
+    "higasPrice": 13.48,
+    "unit": "un"
+  },
+  {
+    "id": 140,
+    "name": "Linguiça Toscana",
+    "category": "Açougue",
+    "nagumoPrice": 22.8,
+    "higasPrice": 23.36,
+    "unit": "kg"
+  },
+  {
+    "id": 141,
+    "name": "Linguiça de Frango",
+    "category": "Açougue",
+    "nagumoPrice": 21.85,
+    "higasPrice": 21.53,
+    "unit": "kg"
+  },
+  {
+    "id": 142,
+    "name": "Linguiça Calabresa Defumada",
+    "category": "Açougue",
+    "nagumoPrice": 28.22,
+    "higasPrice": 25.78,
+    "unit": "kg"
+  },
+  {
+    "id": 143,
+    "name": "Linguiça Paio",
+    "category": "Açougue",
+    "nagumoPrice": 31.66,
+    "higasPrice": 33.67,
+    "unit": "kg"
+  },
+  {
+    "id": 144,
+    "name": "Tilápia Filé Fresco",
+    "category": "Peixaria",
+    "nagumoPrice": 48.29,
+    "higasPrice": 47.7,
+    "unit": "kg"
+  },
+  {
+    "id": 145,
+    "name": "Tilápia Inteira",
+    "category": "Peixaria",
+    "nagumoPrice": 23.17,
+    "higasPrice": 22.74,
+    "unit": "kg"
+  },
+  {
+    "id": 146,
+    "name": "Salmão Filé Fresco",
+    "category": "Peixaria",
+    "nagumoPrice": 121.35,
+    "higasPrice": 118.95,
+    "unit": "kg"
+  },
+  {
+    "id": 147,
+    "name": "Sardinha Fresca",
+    "category": "Peixaria",
+    "nagumoPrice": 15.81,
+    "higasPrice": 15.18,
+    "unit": "kg"
+  },
+  {
+    "id": 148,
+    "name": "Merluza Filé Congelado 800g",
+    "category": "Peixaria",
+    "nagumoPrice": 29,
+    "higasPrice": 27.66,
+    "unit": "pacote"
+  },
+  {
+    "id": 149,
+    "name": "Bacalhau Polaca",
+    "category": "Peixaria",
+    "nagumoPrice": 48.38,
+    "higasPrice": 46.68,
+    "unit": "kg"
+  },
+  {
+    "id": 150,
+    "name": "Bacalhau Porto Imperial",
+    "category": "Peixaria",
+    "nagumoPrice": 156.24,
+    "higasPrice": 152.35,
+    "unit": "kg"
+  },
+  {
+    "id": 151,
+    "name": "Camarão Médio Limpo 400g",
+    "category": "Peixaria",
+    "nagumoPrice": 46.96,
+    "higasPrice": 49.52,
+    "unit": "pacote"
+  },
+  {
+    "id": 152,
+    "name": "Leite Integral 1L (Caixa)",
+    "category": "Laticínios",
+    "nagumoPrice": 5.14,
+    "higasPrice": 4.83,
+    "unit": "L"
+  },
+  {
+    "id": 153,
+    "name": "Leite Desnatado 1L (Caixa)",
+    "category": "Laticínios",
+    "nagumoPrice": 4.75,
+    "higasPrice": 4.78,
+    "unit": "L"
+  },
+  {
+    "id": 154,
+    "name": "Leite Sem Lactose 1L",
+    "category": "Laticínios",
+    "nagumoPrice": 7.2,
+    "higasPrice": 7.5,
+    "unit": "L"
+  },
+  {
+    "id": 155,
+    "name": "Leite de Soja/Amêndoas 1L",
+    "category": "Laticínios",
+    "nagumoPrice": 14.48,
+    "higasPrice": 14.96,
+    "unit": "L"
+  },
+  {
+    "id": 156,
+    "name": "Manteiga com Sal 200g",
+    "category": "Laticínios",
+    "nagumoPrice": 13.91,
+    "higasPrice": 13.09,
+    "unit": "un"
+  },
+  {
+    "id": 157,
+    "name": "Manteiga sem Sal 200g",
+    "category": "Laticínios",
+    "nagumoPrice": 13.77,
+    "higasPrice": 12.33,
+    "unit": "un"
+  },
+  {
+    "id": 158,
+    "name": "Margarina com Sal 500g",
+    "category": "Laticínios",
+    "nagumoPrice": 7.8,
+    "higasPrice": 8.57,
+    "unit": "un"
+  },
+  {
+    "id": 159,
+    "name": "Requeijão Tradicional 200g",
+    "category": "Laticínios",
+    "nagumoPrice": 9.59,
+    "higasPrice": 8.86,
+    "unit": "un"
+  },
+  {
+    "id": 160,
+    "name": "Requeijão Light 200g",
+    "category": "Laticínios",
+    "nagumoPrice": 9.43,
+    "higasPrice": 9.24,
+    "unit": "un"
+  },
+  {
+    "id": 161,
+    "name": "Iogurte Natural 170g",
+    "category": "Laticínios",
+    "nagumoPrice": 3.21,
+    "higasPrice": 3.35,
+    "unit": "un"
+  },
+  {
+    "id": 162,
+    "name": "Iogurte Grego 100g",
+    "category": "Laticínios",
+    "nagumoPrice": 4.18,
+    "higasPrice": 3.82,
+    "unit": "un"
+  },
+  {
+    "id": 163,
+    "name": "Iogurte Morango Garrafa 1L",
+    "category": "Laticínios",
+    "nagumoPrice": 13.32,
+    "higasPrice": 13.7,
+    "unit": "un"
+  },
+  {
+    "id": 164,
+    "name": "Leite Fermentado 6un",
+    "category": "Laticínios",
+    "nagumoPrice": 8.64,
+    "higasPrice": 8.04,
+    "unit": "pacote"
+  },
+  {
+    "id": 165,
+    "name": "Petit Suisse 320g",
+    "category": "Laticínios",
+    "nagumoPrice": 6.8,
+    "higasPrice": 6.47,
+    "unit": "un"
+  },
+  {
+    "id": 166,
+    "name": "Creme de Ricota 200g",
+    "category": "Laticínios",
+    "nagumoPrice": 8.88,
+    "higasPrice": 9.52,
+    "unit": "un"
+  },
+  {
+    "id": 167,
+    "name": "Cream Cheese 150g",
+    "category": "Laticínios",
+    "nagumoPrice": 10.54,
+    "higasPrice": 10.89,
+    "unit": "un"
+  },
+  {
+    "id": 168,
+    "name": "Queijo Muçarela Fatiado",
+    "category": "Frios",
+    "nagumoPrice": 46.09,
+    "higasPrice": 41.96,
+    "unit": "kg"
+  },
+  {
+    "id": 169,
+    "name": "Queijo Muçarela Peça",
+    "category": "Frios",
+    "nagumoPrice": 37.91,
+    "higasPrice": 38.04,
+    "unit": "kg"
+  },
+  {
+    "id": 170,
+    "name": "Queijo Prato Fatiado",
+    "category": "Frios",
+    "nagumoPrice": 45.46,
+    "higasPrice": 49,
+    "unit": "kg"
+  },
+  {
+    "id": 171,
+    "name": "Queijo Minas Frescal",
+    "category": "Frios",
+    "nagumoPrice": 35.56,
+    "higasPrice": 36.16,
+    "unit": "kg"
+  },
+  {
+    "id": 172,
+    "name": "Queijo Minas Padrão",
+    "category": "Frios",
+    "nagumoPrice": 56.12,
+    "higasPrice": 61.54,
+    "unit": "kg"
+  },
+  {
+    "id": 173,
+    "name": "Queijo Coalho (Espeto)",
+    "category": "Frios",
+    "nagumoPrice": 50.78,
+    "higasPrice": 49.1,
+    "unit": "kg"
+  },
+  {
+    "id": 174,
+    "name": "Queijo Parmesão Ralado 50g",
+    "category": "Frios",
+    "nagumoPrice": 5.66,
+    "higasPrice": 6.47,
+    "unit": "un"
+  },
+  {
+    "id": 175,
+    "name": "Queijo Provolone",
+    "category": "Frios",
+    "nagumoPrice": 74.72,
+    "higasPrice": 67.02,
+    "unit": "kg"
+  },
+  {
+    "id": 176,
+    "name": "Gorgonzola",
+    "category": "Frios",
+    "nagumoPrice": 93.84,
+    "higasPrice": 95.45,
+    "unit": "kg"
+  },
+  {
+    "id": 177,
+    "name": "Presunto Cozido Fatiado",
+    "category": "Frios",
+    "nagumoPrice": 30.9,
+    "higasPrice": 27.65,
+    "unit": "kg"
+  },
+  {
+    "id": 178,
+    "name": "Apresuntado Fatiado",
+    "category": "Frios",
+    "nagumoPrice": 19.06,
+    "higasPrice": 19.57,
+    "unit": "kg"
+  },
+  {
+    "id": 179,
+    "name": "Peito de Peru Defumado Fatiado",
+    "category": "Frios",
+    "nagumoPrice": 70.21,
+    "higasPrice": 64.24,
+    "unit": "kg"
+  },
+  {
+    "id": 180,
+    "name": "Peito de Frango Defumado Fatiado",
+    "category": "Frios",
+    "nagumoPrice": 49.38,
+    "higasPrice": 50.59,
+    "unit": "kg"
+  },
+  {
+    "id": 181,
+    "name": "Mortadela Tradicional Fatiada",
+    "category": "Frios",
+    "nagumoPrice": 14.82,
+    "higasPrice": 14.27,
+    "unit": "kg"
+  },
+  {
+    "id": 182,
+    "name": "Mortadela Defumada Fatiada",
+    "category": "Frios",
+    "nagumoPrice": 25.89,
+    "higasPrice": 24.4,
+    "unit": "kg"
+  },
+  {
+    "id": 183,
+    "name": "Salame Italiano Fatiado",
+    "category": "Frios",
+    "nagumoPrice": 85.32,
+    "higasPrice": 83.13,
+    "unit": "kg"
+  },
+  {
+    "id": 184,
+    "name": "Salsicha Hot Dog (Avulsa)",
+    "category": "Frios",
+    "nagumoPrice": 12.58,
+    "higasPrice": 12.84,
+    "unit": "kg"
+  },
+  {
+    "id": 185,
+    "name": "Salsicha Pacote 500g",
+    "category": "Frios",
+    "nagumoPrice": 8.11,
+    "higasPrice": 8.23,
+    "unit": "pacote"
+  },
+  {
+    "id": 186,
+    "name": "Arroz Agulhinha Tipo 1 (5kg)",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 27.84,
+    "higasPrice": 29.97,
+    "unit": "pacote"
+  },
+  {
+    "id": 187,
+    "name": "Arroz Integral 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 7.87,
+    "higasPrice": 7.52,
+    "unit": "kg"
+  },
+  {
+    "id": 188,
+    "name": "Arroz Parboilizado 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 5.77,
+    "higasPrice": 6.1,
+    "unit": "kg"
+  },
+  {
+    "id": 189,
+    "name": "Feijão Carioca 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 8.65,
+    "higasPrice": 8.58,
+    "unit": "kg"
+  },
+  {
+    "id": 190,
+    "name": "Feijão Preto 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 8.18,
+    "higasPrice": 8.42,
+    "unit": "kg"
+  },
+  {
+    "id": 191,
+    "name": "Açúcar Refinado 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 4.89,
+    "higasPrice": 4.47,
+    "unit": "kg"
+  },
+  {
+    "id": 192,
+    "name": "Açúcar Cristal 5kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 19.26,
+    "higasPrice": 18.12,
+    "unit": "pacote"
+  },
+  {
+    "id": 193,
+    "name": "Açúcar Demerara 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 6.95,
+    "higasPrice": 7.15,
+    "unit": "kg"
+  },
+  {
+    "id": 194,
+    "name": "Açúcar Mascavo 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 9.27,
+    "higasPrice": 8.92,
+    "unit": "un"
+  },
+  {
+    "id": 195,
+    "name": "Café Torrado e Moído 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 18.13,
+    "higasPrice": 19.37,
+    "unit": "pacote"
+  },
+  {
+    "id": 196,
+    "name": "Café Solúvel 50g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 7.83,
+    "higasPrice": 7.86,
+    "unit": "un"
+  },
+  {
+    "id": 197,
+    "name": "Óleo de Soja 900ml",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 5.63,
+    "higasPrice": 5.71,
+    "unit": "L"
+  },
+  {
+    "id": 198,
+    "name": "Azeite de Oliva Extra Virgem 500ml",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 38.29,
+    "higasPrice": 39.45,
+    "unit": "un"
+  },
+  {
+    "id": 199,
+    "name": "Óleo de Girassol / Milho 900ml",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 12.29,
+    "higasPrice": 13.21,
+    "unit": "L"
+  },
+  {
+    "id": 200,
+    "name": "Macarrão Espaguete 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 4.29,
+    "higasPrice": 4.62,
+    "unit": "pacote"
+  },
+  {
+    "id": 201,
+    "name": "Macarrão Parafuso 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 4.86,
+    "higasPrice": 4.62,
+    "unit": "pacote"
+  },
+  {
+    "id": 202,
+    "name": "Macarrão Instantâneo (Miojo)",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 2.27,
+    "higasPrice": 2.3,
+    "unit": "un"
+  },
+  {
+    "id": 203,
+    "name": "Farinha de Trigo 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 5.1,
+    "higasPrice": 4.98,
+    "unit": "kg"
+  },
+  {
+    "id": 204,
+    "name": "Farinha de Mandioca Branca 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 5.29,
+    "higasPrice": 5.81,
+    "unit": "un"
+  },
+  {
+    "id": 205,
+    "name": "Farinha de Mandioca Torrada 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 5.64,
+    "higasPrice": 5.81,
+    "unit": "un"
+  },
+  {
+    "id": 206,
+    "name": "Fubá Mimoso 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 3.34,
+    "higasPrice": 3.44,
+    "unit": "un"
+  },
+  {
+    "id": 207,
+    "name": "Polvilho Doce 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 7.07,
+    "higasPrice": 6.79,
+    "unit": "un"
+  },
+  {
+    "id": 208,
+    "name": "Polvilho Azedo 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 6.72,
+    "higasPrice": 6.74,
+    "unit": "un"
+  },
+  {
+    "id": 209,
+    "name": "Tapioca Goma Hidratada 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 8.08,
+    "higasPrice": 8.61,
+    "unit": "un"
+  },
+  {
+    "id": 210,
+    "name": "Pipoca Milho 500g",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 4.7,
+    "higasPrice": 5,
+    "unit": "un"
+  },
+  {
+    "id": 211,
+    "name": "Sal Refinado 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 2.53,
+    "higasPrice": 2.44,
+    "unit": "kg"
+  },
+  {
+    "id": 212,
+    "name": "Sal Grosso 1kg",
+    "category": "Mercearia Alimentos Básicos",
+    "nagumoPrice": 4.23,
+    "higasPrice": 4.03,
+    "unit": "kg"
+  },
+  {
+    "id": 213,
+    "name": "Molho de Tomate Sachê 340g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 2.6,
+    "higasPrice": 2.45,
+    "unit": "un"
+  },
+  {
+    "id": 214,
+    "name": "Extrato de Tomate Lata 140g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 3.41,
+    "higasPrice": 3.15,
+    "unit": "un"
+  },
+  {
+    "id": 215,
+    "name": "Milho Verde Lata 170g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 3.84,
+    "higasPrice": 3.59,
+    "unit": "un"
+  },
+  {
+    "id": 216,
+    "name": "Ervilha Lata 170g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 3.67,
+    "higasPrice": 3.48,
+    "unit": "un"
+  },
+  {
+    "id": 217,
+    "name": "Milho e Ervilha (Dueta) Lata",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 4.07,
+    "higasPrice": 4.17,
+    "unit": "un"
+  },
+  {
+    "id": 218,
+    "name": "Azeitona Verde com Caroço 500g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 12.85,
+    "higasPrice": 13.16,
+    "unit": "un"
+  },
+  {
+    "id": 219,
+    "name": "Azeitona Verde sem Caroço 500g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 16.34,
+    "higasPrice": 15.06,
+    "unit": "un"
+  },
+  {
+    "id": 220,
+    "name": "Creme de Leite 200g (Caixinha)",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 4.04,
+    "higasPrice": 4.15,
+    "unit": "un"
+  },
+  {
+    "id": 221,
+    "name": "Leite Condensado 395g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 6.09,
+    "higasPrice": 6.12,
+    "unit": "un"
+  },
+  {
+    "id": 222,
+    "name": "Sardinha em Óleo Lata",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 5.11,
+    "higasPrice": 4.66,
+    "unit": "un"
+  },
+  {
+    "id": 223,
+    "name": "Atum Ralado em Óleo Lata",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 7.13,
+    "higasPrice": 6.65,
+    "unit": "un"
+  },
+  {
+    "id": 224,
+    "name": "Atum Sólido Lata",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 9.71,
+    "higasPrice": 10.49,
+    "unit": "un"
+  },
+  {
+    "id": 225,
+    "name": "Maionese Pote 500g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 8.25,
+    "higasPrice": 8.14,
+    "unit": "un"
+  },
+  {
+    "id": 226,
+    "name": "Ketchup Tradicional 400g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 8.65,
+    "higasPrice": 9.21,
+    "unit": "un"
+  },
+  {
+    "id": 227,
+    "name": "Mostarda Amarela 200g",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 6.69,
+    "higasPrice": 6.58,
+    "unit": "un"
+  },
+  {
+    "id": 228,
+    "name": "Vinagre de Álcool 750ml",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 3.46,
+    "higasPrice": 3.73,
+    "unit": "un"
+  },
+  {
+    "id": 229,
+    "name": "Vinagre de Maçã 400ml",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 6.22,
+    "higasPrice": 5.85,
+    "unit": "un"
+  },
+  {
+    "id": 230,
+    "name": "Molho de Soja (Shoyu) 150ml",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 4.47,
+    "higasPrice": 4.28,
+    "unit": "un"
+  },
+  {
+    "id": 231,
+    "name": "Pimenta Vermelha (Molho) 150ml",
+    "category": "Mercearia Enlatados & Molhos",
+    "nagumoPrice": 5.22,
+    "higasPrice": 5.17,
+    "unit": "un"
+  },
+  {
+    "id": 232,
+    "name": "Biscoito Recheado Chocolate 130g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 3.67,
+    "higasPrice": 3.36,
+    "unit": "un"
+  },
+  {
+    "id": 233,
+    "name": "Biscoito Maria / Maizena 400g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 7.32,
+    "higasPrice": 6.93,
+    "unit": "un"
+  },
+  {
+    "id": 234,
+    "name": "Biscoito Água e Sal / Cream Cracker 400g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 6.35,
+    "higasPrice": 6.06,
+    "unit": "un"
+  },
+  {
+    "id": 235,
+    "name": "Bolo Pronto Laranja/Chocolate 250g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 9.61,
+    "higasPrice": 9.67,
+    "unit": "un"
+  },
+  {
+    "id": 236,
+    "name": "Gelatina em Pó",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 1.83,
+    "higasPrice": 1.79,
+    "unit": "un"
+  },
+  {
+    "id": 237,
+    "name": "Mistura para Bolo Pó 400g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 6.2,
+    "higasPrice": 6.74,
+    "unit": "un"
+  },
+  {
+    "id": 238,
+    "name": "Achocolatado em Pó 400g (Pote)",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 10.14,
+    "higasPrice": 10.21,
+    "unit": "un"
+  },
+  {
+    "id": 239,
+    "name": "Achocolatado Pronto Caixinha 200ml",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 2.64,
+    "higasPrice": 2.56,
+    "unit": "un"
+  },
+  {
+    "id": 240,
+    "name": "Aveia em Flocos 200g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 6.01,
+    "higasPrice": 5.41,
+    "unit": "un"
+  },
+  {
+    "id": 241,
+    "name": "Granola 500g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 15.54,
+    "higasPrice": 15.6,
+    "unit": "pacote"
+  },
+  {
+    "id": 242,
+    "name": "Chocolate em Barra 90g (Ao Leite/Meio Amargo)",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 6.75,
+    "higasPrice": 6.45,
+    "unit": "un"
+  },
+  {
+    "id": 243,
+    "name": "Caixa de Bombom Variados 250g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 14.73,
+    "higasPrice": 16.32,
+    "unit": "un"
+  },
+  {
+    "id": 244,
+    "name": "Bala Sabor Frutas 100g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 3.71,
+    "higasPrice": 3.69,
+    "unit": "un"
+  },
+  {
+    "id": 245,
+    "name": "Chiclete Cartela",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 2.47,
+    "higasPrice": 2.58,
+    "unit": "un"
+  },
+  {
+    "id": 246,
+    "name": "Leite em Pó Integral 400g",
+    "category": "Mercearia Doces & Biscoitos",
+    "nagumoPrice": 20.47,
+    "higasPrice": 18.8,
+    "unit": "un"
+  },
+  {
+    "id": 247,
+    "name": "Sabão em Pó 1kg (Omo/Brilhante/Tixan)",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 17,
+    "higasPrice": 16.16,
+    "unit": "kg"
+  },
+  {
+    "id": 248,
+    "name": "Sabão Líquido 3L",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 38.44,
+    "higasPrice": 38.39,
+    "unit": "un"
+  },
+  {
+    "id": 249,
+    "name": "Sabão em Pedra Neutro 5un",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 13.78,
+    "higasPrice": 13.14,
+    "unit": "pacote"
+  },
+  {
+    "id": 250,
+    "name": "Amaciante Concentrado 1L",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 17.33,
+    "higasPrice": 15.38,
+    "unit": "un"
+  },
+  {
+    "id": 251,
+    "name": "Amaciante Tradicional 2L",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 14.02,
+    "higasPrice": 12.63,
+    "unit": "un"
+  },
+  {
+    "id": 252,
+    "name": "Detergente Líquido Neutro/Maçã/Coco 500ml",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 2.41,
+    "higasPrice": 2.46,
+    "unit": "un"
+  },
+  {
+    "id": 253,
+    "name": "Água Sanitária 2L",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 8.13,
+    "higasPrice": 8.09,
+    "unit": "un"
+  },
+  {
+    "id": 254,
+    "name": "Desinfetante Pinho/Lavanda 500ml",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 5.97,
+    "higasPrice": 5.27,
+    "unit": "un"
+  },
+  {
+    "id": 255,
+    "name": "Limpador Multiuso (Veja/Cif) 500ml",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 6.76,
+    "higasPrice": 6.74,
+    "unit": "un"
+  },
+  {
+    "id": 256,
+    "name": "Lustra Móveis 200ml",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 8.77,
+    "higasPrice": 8.94,
+    "unit": "un"
+  },
+  {
+    "id": 257,
+    "name": "Limpa Vidros 500ml",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 9.85,
+    "higasPrice": 10.07,
+    "unit": "un"
+  },
+  {
+    "id": 258,
+    "name": "Álcool Líquido 70% 1L",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 9.6,
+    "higasPrice": 9.41,
+    "unit": "un"
+  },
+  {
+    "id": 259,
+    "name": "Álcool em Gel 70% 500g",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 13.73,
+    "higasPrice": 13.66,
+    "unit": "un"
+  },
+  {
+    "id": 260,
+    "name": "Esponja Dupla Face 4un",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 6.06,
+    "higasPrice": 5.91,
+    "unit": "pacote"
+  },
+  {
+    "id": 261,
+    "name": "Esponja de Aço (Bombril/Assolan) 8un",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 3.4,
+    "higasPrice": 3.63,
+    "unit": "pacote"
+  },
+  {
+    "id": 262,
+    "name": "Pano de Chão",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 5.91,
+    "higasPrice": 6.42,
+    "unit": "un"
+  },
+  {
+    "id": 263,
+    "name": "Saco de Lixo 15L 30un",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 8.5,
+    "higasPrice": 8.9,
+    "unit": "pacote"
+  },
+  {
+    "id": 264,
+    "name": "Saco de Lixo 30L 30un",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 12.85,
+    "higasPrice": 12.91,
+    "unit": "pacote"
+  },
+  {
+    "id": 265,
+    "name": "Saco de Lixo 50L 30un",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 16.29,
+    "higasPrice": 17.35,
+    "unit": "pacote"
+  },
+  {
+    "id": 266,
+    "name": "Saco de Lixo 100L 15un",
+    "category": "Limpeza Funcional",
+    "nagumoPrice": 19.71,
+    "higasPrice": 17.69,
+    "unit": "pacote"
+  },
+  {
+    "id": 267,
+    "name": "Papel Higiênico Folha Dupla 30m 12un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 22.32,
+    "higasPrice": 24.09,
+    "unit": "pacote"
+  },
+  {
+    "id": 268,
+    "name": "Papel Higiênico Folha Simples 4un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 5.61,
+    "higasPrice": 5.76,
+    "unit": "pacote"
+  },
+  {
+    "id": 269,
+    "name": "Creme Dental Tradicional 90g",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 4.71,
+    "higasPrice": 4.75,
+    "unit": "un"
+  },
+  {
+    "id": 270,
+    "name": "Fio Dental 50m",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 8.97,
+    "higasPrice": 8.78,
+    "unit": "un"
+  },
+  {
+    "id": 271,
+    "name": "Enxaguante Bucal 500ml",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 20.45,
+    "higasPrice": 19.87,
+    "unit": "un"
+  },
+  {
+    "id": 272,
+    "name": "Escova de Dente unitária",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 8.58,
+    "higasPrice": 8.6,
+    "unit": "un"
+  },
+  {
+    "id": 273,
+    "name": "Sabonete Barra 90g",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 2.94,
+    "higasPrice": 2.95,
+    "unit": "un"
+  },
+  {
+    "id": 274,
+    "name": "Sabonete Líquido Refil 200ml",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 8.53,
+    "higasPrice": 7.79,
+    "unit": "un"
+  },
+  {
+    "id": 275,
+    "name": "Shampoo 350ml",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 16.49,
+    "higasPrice": 17.95,
+    "unit": "un"
+  },
+  {
+    "id": 276,
+    "name": "Condicionador 350ml",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 18.38,
+    "higasPrice": 20.65,
+    "unit": "un"
+  },
+  {
+    "id": 277,
+    "name": "Desodorante Aerossol 150ml",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 15.88,
+    "higasPrice": 15.57,
+    "unit": "un"
+  },
+  {
+    "id": 278,
+    "name": "Desodorante Roll-on 50ml",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 10.59,
+    "higasPrice": 10.53,
+    "unit": "un"
+  },
+  {
+    "id": 279,
+    "name": "Lâmina de Barbear 2un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 12.54,
+    "higasPrice": 12.77,
+    "unit": "pacote"
+  },
+  {
+    "id": 280,
+    "name": "Creme de Barbear 100g",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 19.94,
+    "higasPrice": 20.26,
+    "unit": "un"
+  },
+  {
+    "id": 281,
+    "name": "Absorvente com Abas 8un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 5.77,
+    "higasPrice": 6.16,
+    "unit": "pacote"
+  },
+  {
+    "id": 282,
+    "name": "Absorvente Noturno 8un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 7.93,
+    "higasPrice": 7.93,
+    "unit": "pacote"
+  },
+  {
+    "id": 283,
+    "name": "Protetor Diário 15un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 6.88,
+    "higasPrice": 6.96,
+    "unit": "pacote"
+  },
+  {
+    "id": 284,
+    "name": "Fralda Infantil P/M/G/XG (Pacote Jumbo)",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 67.74,
+    "higasPrice": 71.55,
+    "unit": "pacote"
+  },
+  {
+    "id": 285,
+    "name": "Toalhas Umedecidas Infantil 100un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 15.94,
+    "higasPrice": 15.93,
+    "unit": "pacote"
+  },
+  {
+    "id": 286,
+    "name": "Cotonete (Hastes Flexíveis) 75un",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 4.58,
+    "higasPrice": 4.84,
+    "unit": "pacote"
+  },
+  {
+    "id": 287,
+    "name": "Algodão Bolinha 50g",
+    "category": "Higiene & Cuidados",
+    "nagumoPrice": 6.19,
+    "higasPrice": 6.01,
+    "unit": "un"
+  },
+  {
+    "id": 288,
+    "name": "Refrigerante Coca-Cola 2L",
+    "category": "Bebidas",
+    "nagumoPrice": 9.71,
+    "higasPrice": 10.29,
+    "unit": "un"
+  },
+  {
+    "id": 289,
+    "name": "Refrigerante Guaraná Antarctica 2L",
+    "category": "Bebidas",
+    "nagumoPrice": 8.66,
+    "higasPrice": 8.94,
+    "unit": "un"
+  },
+  {
+    "id": 290,
+    "name": "Refrigerante Zero Açúcar 2L",
+    "category": "Bebidas",
+    "nagumoPrice": 9.76,
+    "higasPrice": 10.6,
+    "unit": "un"
+  },
+  {
+    "id": 291,
+    "name": "Refrigerante Lata 350ml",
+    "category": "Bebidas",
+    "nagumoPrice": 3.81,
+    "higasPrice": 3.71,
+    "unit": "un"
+  },
+  {
+    "id": 292,
+    "name": "Suco Néctar Caixinha 1L",
+    "category": "Bebidas",
+    "nagumoPrice": 7.17,
+    "higasPrice": 7.35,
+    "unit": "un"
+  },
+  {
+    "id": 293,
+    "name": "Suco Integral Uva 1.5L Garrafa",
+    "category": "Bebidas",
+    "nagumoPrice": 20.75,
+    "higasPrice": 20.47,
+    "unit": "un"
+  },
+  {
+    "id": 294,
+    "name": "Suco em Pó (Tang/Camp/Mid)",
+    "category": "Bebidas",
+    "nagumoPrice": 1.31,
+    "higasPrice": 1.28,
+    "unit": "un"
+  },
+  {
+    "id": 295,
+    "name": "Água Mineral sem Gás 1.5L",
+    "category": "Bebidas",
+    "nagumoPrice": 2.99,
+    "higasPrice": 3,
+    "unit": "un"
+  },
+  {
+    "id": 296,
+    "name": "Água Mineral com Gás 1.5L",
+    "category": "Bebidas",
+    "nagumoPrice": 3.7,
+    "higasPrice": 3.73,
+    "unit": "un"
+  },
+  {
+    "id": 297,
+    "name": "Água de Coco 1L",
+    "category": "Bebidas",
+    "nagumoPrice": 11.32,
+    "higasPrice": 11.55,
+    "unit": "un"
+  },
+  {
+    "id": 298,
+    "name": "Café Cápsula 10un",
+    "category": "Bebidas",
+    "nagumoPrice": 24.3,
+    "higasPrice": 24.93,
+    "unit": "pacote"
+  },
+  {
+    "id": 299,
+    "name": "Cerveja Pilsen Lata 350ml",
+    "category": "Bebidas",
+    "nagumoPrice": 3.36,
+    "higasPrice": 3.85,
+    "unit": "un"
+  },
+  {
+    "id": 300,
+    "name": "Cerveja Puro Malte Lata 350ml",
+    "category": "Bebidas",
+    "nagumoPrice": 4.75,
+    "higasPrice": 4.38,
+    "unit": "un"
+  },
+  {
+    "id": 301,
+    "name": "Cerveja Garrafa 600ml",
+    "category": "Bebidas",
+    "nagumoPrice": 8.39,
+    "higasPrice": 8.53,
+    "unit": "un"
+  },
+  {
+    "id": 302,
+    "name": "Vinho Tinto Suave Nacional 750ml",
+    "category": "Bebidas",
+    "nagumoPrice": 24.35,
+    "higasPrice": 24.85,
+    "unit": "un"
+  },
+  {
+    "id": 303,
+    "name": "Vinho Seco Chileno 750ml",
+    "category": "Bebidas",
+    "nagumoPrice": 42.49,
+    "higasPrice": 43.72,
+    "unit": "un"
+  },
+  {
+    "id": 304,
+    "name": "Vodka Orloff/Smirnoff 1L",
+    "category": "Bebidas",
+    "nagumoPrice": 38.87,
+    "higasPrice": 34.37,
+    "unit": "un"
+  },
+  {
+    "id": 305,
+    "name": "Gin Garrafa 700ml",
+    "category": "Bebidas",
+    "nagumoPrice": 45.22,
+    "higasPrice": 45.05,
+    "unit": "un"
+  },
+  {
+    "id": 306,
+    "name": "Pão de Queijo Congelado 400g",
+    "category": "Congelados",
+    "nagumoPrice": 15.66,
+    "higasPrice": 15.96,
+    "unit": "pacote"
+  },
+  {
+    "id": 307,
+    "name": "Pizza Congelada Calabresa/Mussarela",
+    "category": "Congelados",
+    "nagumoPrice": 15.48,
+    "higasPrice": 15.94,
+    "unit": "un"
+  },
+  {
+    "id": 308,
+    "name": "Hamburguer Bovino Misto 12un",
+    "category": "Congelados",
+    "nagumoPrice": 19.12,
+    "higasPrice": 19.24,
+    "unit": "pacote"
+  },
+  {
+    "id": 309,
+    "name": "Hambúrguer 100% Bovino 2un",
+    "category": "Congelados",
+    "nagumoPrice": 12.45,
+    "higasPrice": 12.44,
+    "unit": "pacote"
+  },
+  {
+    "id": 310,
+    "name": "Frango empanado (Nuggets) 300g",
+    "category": "Congelados",
+    "nagumoPrice": 12.58,
+    "higasPrice": 11.7,
+    "unit": "pacote"
+  },
+  {
+    "id": 311,
+    "name": "Polenta Palito Congelada 400g",
+    "category": "Congelados",
+    "nagumoPrice": 10.06,
+    "higasPrice": 10.52,
+    "unit": "pacote"
+  },
+  {
+    "id": 312,
+    "name": "Mandioca Palito Congelada 400g",
+    "category": "Congelados",
+    "nagumoPrice": 12.42,
+    "higasPrice": 11.66,
+    "unit": "pacote"
+  },
+  {
+    "id": 313,
+    "name": "Açaí Pote 1L",
+    "category": "Congelados",
+    "nagumoPrice": 22.21,
+    "higasPrice": 23.9,
+    "unit": "un"
+  },
+  {
+    "id": 314,
+    "name": "Sorvete Pote 1.5L (Kibon/Nestlé)",
+    "category": "Congelados",
+    "nagumoPrice": 25.56,
+    "higasPrice": 25.24,
+    "unit": "un"
+  },
+  {
+    "id": 315,
+    "name": "Pão Francês",
+    "category": "Padaria",
+    "nagumoPrice": 19.5,
+    "higasPrice": 21.21,
+    "unit": "kg"
+  },
+  {
+    "id": 316,
+    "name": "Pão de Forma Tradicional 500g",
+    "category": "Padaria",
+    "nagumoPrice": 8.6,
+    "higasPrice": 7.72,
+    "unit": "un"
+  },
+  {
+    "id": 317,
+    "name": "Pão de Forma Integral 400g",
+    "category": "Padaria",
+    "nagumoPrice": 11.13,
+    "higasPrice": 10.02,
+    "unit": "un"
+  },
+  {
+    "id": 318,
+    "name": "Pão de Hot Dog 10un",
+    "category": "Padaria",
+    "nagumoPrice": 8.86,
+    "higasPrice": 8.12,
+    "unit": "pacote"
+  },
+  {
+    "id": 319,
+    "name": "Pão de Hambúrguer 6un",
+    "category": "Padaria",
+    "nagumoPrice": 9.35,
+    "higasPrice": 8.53,
+    "unit": "pacote"
+  },
+  {
+    "id": 320,
+    "name": "Pão Sírio 10un",
+    "category": "Padaria",
+    "nagumoPrice": 9.88,
+    "higasPrice": 10.22,
+    "unit": "pacote"
+  },
+  {
+    "id": 321,
+    "name": "Bolo de Milho / Fubá (Inteiro)",
+    "category": "Padaria",
+    "nagumoPrice": 18.29,
+    "higasPrice": 19.38,
+    "unit": "un"
+  },
+  {
+    "id": 322,
+    "name": "Margarina Fatiada na Padaria",
+    "category": "Padaria",
+    "nagumoPrice": 27.48,
+    "higasPrice": 28.68,
+    "unit": "kg"
+  },
+  {
+    "id": 323,
+    "name": "Pão de Alho (Para Churrasco) 400g",
+    "category": "Padaria",
+    "nagumoPrice": 14.71,
+    "higasPrice": 16,
+    "unit": "pacote"
+  },
+  {
+    "id": 324,
+    "name": "Papel Alumínio 30cm x 4m",
+    "category": "Utilidades",
+    "nagumoPrice": 5.62,
+    "higasPrice": 5.44,
+    "unit": "un"
+  },
+  {
+    "id": 325,
+    "name": "Papel Manteiga Rolo",
+    "category": "Utilidades",
+    "nagumoPrice": 6.97,
+    "higasPrice": 6.98,
+    "unit": "un"
+  },
+  {
+    "id": 326,
+    "name": "Filme Útil (Plástico Filme) 15m",
+    "category": "Utilidades",
+    "nagumoPrice": 5.96,
+    "higasPrice": 6.06,
+    "unit": "un"
+  },
+  {
+    "id": 327,
+    "name": "Fósforo Pacote com 10 Caixas",
+    "category": "Utilidades",
+    "nagumoPrice": 4.69,
+    "higasPrice": 4.55,
+    "unit": "pacote"
+  },
+  {
+    "id": 328,
+    "name": "Acendedor de Fogão",
+    "category": "Utilidades",
+    "nagumoPrice": 8.94,
+    "higasPrice": 9.29,
+    "unit": "un"
+  },
+  {
+    "id": 329,
+    "name": "Vela Branca Nº8 8un",
+    "category": "Utilidades",
+    "nagumoPrice": 9.24,
+    "higasPrice": 8.36,
+    "unit": "pacote"
+  },
+  {
+    "id": 330,
+    "name": "Guardanapo de Papel 50un",
+    "category": "Utilidades",
+    "nagumoPrice": 3.46,
+    "higasPrice": 3.6,
+    "unit": "pacote"
+  },
+  {
+    "id": 331,
+    "name": "Papel Toalha Multiuso 2 Rolos",
+    "category": "Utilidades",
+    "nagumoPrice": 6.93,
+    "higasPrice": 6.71,
+    "unit": "pacote"
+  },
+  {
+    "id": 332,
+    "name": "Filtro de Papel para Café (103) 30un",
+    "category": "Utilidades",
+    "nagumoPrice": 5.26,
+    "higasPrice": 5.32,
+    "unit": "pacote"
+  },
+  {
+    "id": 333,
+    "name": "Carvão Vegetal 2.5kg",
+    "category": "Utilidades",
+    "nagumoPrice": 20.55,
+    "higasPrice": 19.96,
+    "unit": "pacote"
+  }
+]

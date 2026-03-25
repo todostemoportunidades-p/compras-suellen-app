@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sand-50: #fefefc;
+  --color-sand-100: #fdfdfa;
+  --color-sand-200: #fbfaf5;
+  --color-sand-300: #f9f9f2;
+  --color-sand-400: #f5f4e8;
+  --color-pastel-green-50: #f0fdf4;
+  --color-pastel-green-100: #dcfce7;
+  --color-pastel-green-500: #77dd77;
+  --color-pastel-green-600: #5cb85c;
+  
+  --shadow-premium: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.01);
+  --shadow-active: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
+  
+  --radius-app: 1.25rem;
+  --radius-card: 1rem;
+}
+
+:root {
+  --background: #fdfdfb;
+  --foreground: #1a1a1a;
+  --card-bg: #ffffff;
+  --card-border: #f1f1ee;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  /* Prevent ghost scrolling on mobile */
+  overscroll-behavior-y: contain;
+  overflow: hidden;
+}
+
+/* Custom Scrollbar for a clean look */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
