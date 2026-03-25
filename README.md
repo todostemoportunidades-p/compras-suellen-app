@@ -16,8 +16,8 @@ O **Compras Suellen** é um aplicativo profissional para gestão de listas de me
 - **[👉 CLIQUE AQUI PARA BAIXAR O APK DIRETO](https://drive.google.com/uc?export=download&id=1QEkTcp4HHdkFXkZwJADjqOGS3w9H1LfR)**
 
 ### 🍎 iPhone / iOS (.IPA)
-- **[👉 CLIQUE AQUI PARA A PÁGINA DE DOWNLOAD (GitHub)](https://github.com/todostemoportunidades-p/compras-suellen-app/actions/runs/23520266567)** 
-- *Aviso MÁXIMO:* Você **PRECISA ESTAR LOGADO** na sua conta do GitHub para que o botão de download seja exibido. Sem login, o arquivo `.ipa` ficará invisível. Role até o final da página em "Artifacts".
+- **[👉 CLIQUE AQUI PARA BAIXAR O IPA DIRETO](https://drive.google.com/uc?export=download&id=1SBplClASxlgEM5vBWEIV3HQsXPw9lgYc)** 
+- *Aviso:* Este é o arquivo `.ipa` direto, sem necessidade de extrair de um ZIP e sem precisar de login no GitHub. Instale usando [Sideloadly](https://sideloadly.io/) ou [AltStore](https://altstore.io/).
 
 ### Pré-requisitos
 - Node.js (v22 ou superior)
