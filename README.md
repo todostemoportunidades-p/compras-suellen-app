@@ -10,7 +10,14 @@ O **Compras Suellen** é um aplicativo profissional para gestão de listas de me
 - **Histórico Completo:** Salve suas listas anteriores para recompra rápida.
 - **Multi-plataforma:** Disponível para **Android** (APK) e **iPhone** (iOS).
 
-## 🚀 Como Executar o Projeto
+## 📱 Links para Instalação
+
+### 🤖 Android (.APK)
+- **[👉 CLIQUE AQUI PARA BAIXAR O APK DIRETO](https://drive.google.com/uc?export=download&id=1QEkTcp4HHdkFXkZwJADjqOGS3w9H1LfR)**
+
+### 🍎 iPhone / iOS (.IPA)
+- **[👉 CLIQUE AQUI PARA A PÁGINA DE DOWNLOAD (GitHub)](https://github.com/todostemoportunidades-p/compras-suellen-app/actions/runs/23520266567)** 
+- *Aviso MÁXIMO:* Você **PRECISA ESTAR LOGADO** na sua conta do GitHub para que o botão de download seja exibido. Sem login, o arquivo `.ipa` ficará invisível. Role até o final da página em "Artifacts".
 
 ### Pré-requisitos
 - Node.js (v22 ou superior)
