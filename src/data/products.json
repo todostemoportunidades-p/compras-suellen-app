@@ -1484,7 +1484,7 @@
     "name": "Arroz Agulhinha Tipo 1 (5kg)",
     "category": "Mercearia Alimentos Básicos",
     "nagumoPrice": 27.84,
-    "higasPrice": 29.97,
+    "higasPrice": 17.99,
     "unit": "pacote"
   },
   {
@@ -1508,7 +1508,7 @@
     "name": "Feijão Carioca 1kg",
     "category": "Mercearia Alimentos Básicos",
     "nagumoPrice": 8.65,
-    "higasPrice": 8.58,
+    "higasPrice": 7.19,
     "unit": "kg"
   },
   {
@@ -1556,7 +1556,7 @@
     "name": "Café Torrado e Moído 500g",
     "category": "Mercearia Alimentos Básicos",
     "nagumoPrice": 18.13,
-    "higasPrice": 19.37,
+    "higasPrice": 27.99,
     "unit": "pacote"
   },
   {
@@ -1572,7 +1572,7 @@
     "name": "Óleo de Soja 900ml",
     "category": "Mercearia Alimentos Básicos",
     "nagumoPrice": 5.63,
-    "higasPrice": 5.71,
+    "higasPrice": 6.49,
     "unit": "L"
   },
   {
@@ -2132,7 +2132,7 @@
     "name": "Papel Higiênico Folha Dupla 30m 12un",
     "category": "Higiene & Cuidados",
     "nagumoPrice": 22.32,
-    "higasPrice": 24.09,
+    "higasPrice": 15.99,
     "unit": "pacote"
   },
   {

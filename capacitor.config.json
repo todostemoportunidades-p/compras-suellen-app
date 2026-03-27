@@ -1,5 +1,16 @@
 {
   "appId": "com.exemplo.mercadoapp",
-  "appName": "Compras Suellen",
-  "webDir": "dist"
+  "appName": "Lista de Mercado",
+  "webDir": "dist",
+  "server": {
+    "allowNavigation": [
+      "*.supermercadohigas.com.br",
+      "*.nagumo.com.br",
+      "*.sondadelivery.com.br",
+      "*.carrefour.com.br",
+      "*.paodeacucar.com",
+      "*.google.com",
+      "wa.me"
+    ]
+  }
 }
