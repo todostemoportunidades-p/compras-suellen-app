@@ -7,6 +7,8 @@ import {
   Zap, ShieldCheck, Navigation
 } from 'lucide-react';
 import { Share } from '@capacitor/share';
+import { Geolocation } from '@capacitor/geolocation';
+import confetti from 'canvas-confetti';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { Contacts } from '@capacitor-community/contacts';
@@ -146,6 +148,7 @@ function App() {
   const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsStatus, setGpsStatus] = useState('');
   const [nearbyMarkets, setNearbyMarkets] = useState([]);
+  const [showCongratsModal, setShowCongratsModal] = useState(false);
 
   // Best Price Hint State
   const [bestPriceHint, setBestPriceHint] = useState(null);
@@ -159,6 +162,26 @@ function App() {
 
   // Scanner State
   const [isScanning, setIsScanning] = useState(false);
+
+  // Auto-finish and confetti logic
+  useEffect(() => {
+    if (view === 'shopping' && activeShoppingId) {
+       const list = historyList.find(l => l.id === activeShoppingId);
+       if (list && list.items.length > 0 && list.items.every(i => i.checked)) {
+          if (!showCongratsModal) {
+             setShowCongratsModal(true);
+             const duration = 2.5 * 1000;
+             const end = Date.now() + duration;
+             const frame = () => {
+               confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#4ade80', '#22c55e', '#16a34a', '#facc15', '#a855f7'], zIndex: 1000 });
+               confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#4ade80', '#22c55e', '#16a34a', '#facc15', '#a855f7'], zIndex: 1000 });
+               if (Date.now() < end) requestAnimationFrame(frame);
+             };
+             frame();
+          }
+       }
+    }
+  }, [historyList, view, activeShoppingId, showCongratsModal]);
 
   // Persistence
   useEffect(() => {
@@ -344,8 +367,6 @@ function App() {
     setNearbyMarkets([]);
     
     try {
-      const { Geolocation } = await import('@capacitor/geolocation');
-      
       // Request permission first
       const permResult = await Geolocation.requestPermissions();
       const isGranted = permResult.location === 'granted' || permResult.coarseLocation === 'granted';
@@ -425,13 +446,7 @@ function App() {
         
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
-        
-        setGpsStatus(`📍 Posição: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
-        
-        // Open Google Maps to show nearby supermarkets
-        window.open(`https://www.google.com/maps/search/supermercados/@${lat},${lng},14z`, '_blank');
-        setGpsStatus(`📍 Abrindo mapa com mercados próximos...`);
-        
+        setGpsStatus(`📍 Posição: ${lat.toFixed(4)}, ${lng.toFixed(4)} — Procure no mapa por supermercados.`);
       } catch (fallbackErr) {
         setGpsStatus('❌ Não foi possível obter a localização. Verifique se o GPS está ativado.');
       }
@@ -886,19 +901,35 @@ function App() {
                         </div>
                      ))}
                   </div>
-
-                  {isComplete && (
-                     <div className="text-center py-10 space-y-4">
-                        <div className="w-16 h-16 bg-pastel-green-500 rounded-2xl mx-auto flex items-center justify-center text-white shadow-xl scale-125">
-                           <CheckCircle2 size={32} />
-                        </div>
-                        <h3 className="text-xl font-black">Compra Concluída!</h3>
-                        <button onClick={() => setView('home')} className="underline text-xs font-bold text-neutral-400">Voltar para o Início</button>
-                     </div>
-                  )}
                </div>
              );
-          })()}
+           })()}
+
+           {/* Shopping Finished Modal */}
+           {showCongratsModal && (
+             <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[300] flex items-center justify-center p-6 animate-fade-in">
+               <div className="bg-white w-full max-w-[320px] rounded-3xl p-8 py-10 text-center space-y-6 shadow-2xl relative overflow-hidden">
+                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-pastel-green-50 rounded-full blur-2xl"></div>
+                 <div className="absolute bottom-0 -left-10 w-24 h-24 bg-yellow-50 rounded-full blur-xl"></div>
+                 <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-pastel-green-400 to-pastel-green-600 rounded-full mx-auto flex items-center justify-center text-white shadow-lg shadow-pastel-green-500/30 transform transition-transform hover:scale-110">
+                   <CheckCircle2 size={48} className="animate-pulse" />
+                 </div>
+                 <div className="relative z-10 space-y-2">
+                   <h3 className="text-2xl font-black text-neutral-900 tracking-tight">Compra<br/>Finalizada!</h3>
+                   <p className="text-[13px] text-neutral-500 font-medium leading-relaxed px-2">Você marcou todos os itens. Parabéns pela organização e economia!</p>
+                 </div>
+                 <button 
+                   onClick={() => {
+                     setShowCongratsModal(false);
+                     setView('home');
+                   }}
+                   className="relative z-10 w-full bg-neutral-900 text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-premium active:scale-95 transition-all outline-none"
+                 >
+                   Voltar ao Início
+                 </button>
+               </div>
+             </div>
+           )}
 
            {view === 'completed' && (
              <div className="space-y-8 animate-slide-up py-10 text-center flex flex-col items-center justify-center">
