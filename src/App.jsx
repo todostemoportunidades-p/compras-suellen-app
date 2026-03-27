@@ -348,7 +348,9 @@ function App() {
       
       // Request permission first
       const permResult = await Geolocation.requestPermissions();
-      if (permResult.location !== 'granted' && permResult.coarseLocation !== 'granted') {
+      const isGranted = permResult.location === 'granted' || permResult.coarseLocation === 'granted';
+      
+      if (!isGranted) {
         setGpsStatus('❌ Permissão de localização negada. Vá em Configurações > Apps > Lista de Mercado > Permissões e ative Localização.');
         setGpsLoading(false);
         return;
@@ -356,10 +358,20 @@ function App() {
       
       setGpsStatus('📡 Obtendo posição GPS...');
       
-      const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 15000
-      });
+      let position;
+      try {
+        position = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 10000
+        });
+      } catch (e) {
+        console.warn('High accuracy failed, trying low accuracy...', e);
+        setGpsStatus('📡 GPS de alta precisão falhou, tentando modo econômico...');
+        position = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: false,
+          timeout: 10000
+        });
+      }
       
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
