@@ -335,11 +335,11 @@ function App() {
 
   const syncPriceCards = async () => {
     setRefreshing(true);
-    // setScanLog(['🚀 Iniciando varredura automática de preços...']); // Removed as scanLog state is not defined
+    setScanLog(['🚀 Iniciando varredura real de preços...']);
 
     try {
       const allUpdates = await scanAllMarkets(markets, products, (msg) => {
-        setScanLog(prev => [...prev.slice(-15), msg]); // Keep last 15 messages
+        setScanLog(prev => [...prev.slice(-20), msg]); // Keep last 20 messages
       });
       
       if (Object.keys(allUpdates).length > 0) {
@@ -442,13 +442,22 @@ function App() {
           .map(el => {
             const mLat = el.lat || (el.center && el.center.lat);
             const mLng = el.lon || (el.center && el.center.lon);
-            const name = (el.tags && el.tags.name) || 'Mercado';
+            const tags = el.tags || {};
+            const name = tags.name || 'Mercado';
             if (!mLat || !mLng) return null;
-            return { name, lat: mLat, lng: mLng, dist: haversine(lat, lng, mLat, mLng) };
+            
+            // Build address from OSM tags
+            const addrParts = [tags['addr:street'], tags['addr:housenumber']].filter(Boolean);
+            const neighbourhood = tags['addr:suburb'] || tags['addr:neighbourhood'] || '';
+            const address = addrParts.length > 0 
+              ? addrParts.join(', ') + (neighbourhood ? ` - ${neighbourhood}` : '')
+              : '';
+            
+            return { name, lat: mLat, lng: mLng, address, dist: haversine(lat, lng, mLat, mLng) };
           })
           .filter(Boolean)
           .sort((a, b) => a.dist - b.dist)
-          .slice(0, 10);
+          .slice(0, 15);
       } catch (overpassErr) {
         console.warn('Overpass API failed:', overpassErr);
       }
@@ -464,8 +473,9 @@ function App() {
       // Sort again after merging
       realMarkets.sort((a, b) => a.dist - b.dist);
       
-      const nearby = realMarkets.slice(0, 10).map(c => ({
+      const nearby = realMarkets.slice(0, 15).map(c => ({
         name: c.name,
+        address: c.address || '',
         distance: c.dist < 1 ? `${(c.dist * 1000).toFixed(0)}m` : `${c.dist.toFixed(1)}km`,
         lat: c.lat,
         lng: c.lng
@@ -1117,8 +1127,9 @@ function App() {
                       <p className="text-[9px] font-black uppercase text-black tracking-widest ml-1">Mercados Próximos Encontrados:</p>
                       {nearbyMarkets.map((nm, idx) => (
                         <div key={idx} className="flex items-center justify-between bg-brand-50 border border-brand-100 p-3 rounded-xl">
-                          <div>
-                            <span className="text-xs font-bold text-black block">{nm.name}</span>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-xs font-bold text-black block truncate">{nm.name}</span>
+                            {nm.address && <span className="text-[9px] text-brand-600 block truncate">📍 {nm.address}</span>}
                             <span className="text-[9px] text-black">{nm.distance}</span>
                           </div>
                           <button 
