@@ -418,51 +418,61 @@ function App() {
         setGpsStatus(`📍 Posição: ${lat.toFixed(6)}, ${lng.toFixed(6)} — Buscando mercados...`);
       }
       
-      // Known supermarket chains in the São Paulo / Grande SP region
-      const defaultChains = [
-        { name: 'Nagumo', lat: -23.5630, lng: -46.5650 },
-        { name: 'Higas', lat: -23.5510, lng: -46.5540 },
-        { name: 'Sonda', lat: -23.5505, lng: -46.6340 },
-        { name: 'Carrefour', lat: -23.5580, lng: -46.6620 },
-        { name: 'Pão de Açúcar', lat: -23.5630, lng: -46.6540 },
-        { name: 'Atacadão', lat: -23.5470, lng: -46.5720 },
-        { name: 'Assaí Atacadista', lat: -23.5390, lng: -46.5680 },
-        { name: 'Extra', lat: -23.5610, lng: -46.6350 },
-        { name: 'Dia', lat: -23.5540, lng: -46.6410 },
-        { name: 'Tenda Atacado', lat: -23.5450, lng: -46.5900 },
-      ];
-
-      const savedLocations = JSON.parse(localStorage.getItem(KEYS.LOCATIONS)) || [];
-      const knownChains = [...savedLocations];
+      // ── Search for REAL nearby supermarkets via Overpass API (OpenStreetMap) ──
+      setGpsStatus(`📍 ${streetName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`} — Buscando mercados REAIS...`);
       
-      // Add defaults if they haven't been overridden by the user
-      for (const dc of defaultChains) {
-        if (!knownChains.find(l => l.name.toLowerCase() === dc.name.toLowerCase())) {
-          knownChains.push(dc);
-        }
-      }
-      
-      // Calculate distance and sort by proximity
       const toRad = (v) => (v * Math.PI) / 180;
       const haversine = (lat1, lng1, lat2, lng2) => {
-        const R = 6371; // km
+        const R = 6371;
         const dLat = toRad(lat2 - lat1);
         const dLng = toRad(lng2 - lng1);
         const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
         return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
       };
+
+      let realMarkets = [];
       
-      const nearby = knownChains
-        .map(c => ({ ...c, dist: haversine(lat, lng, c.lat, c.lng) }))
-        .sort((a, b) => a.dist - b.dist)
-        .slice(0, 6)
-        .map(c => ({
-          name: c.name,
-          distance: c.dist < 1 ? `${(c.dist * 1000).toFixed(0)}m` : `${c.dist.toFixed(1)}km`
-        }));
+      try {
+        // Overpass query: find all supermarkets within 5km radius
+        const overpassQuery = `[out:json][timeout:10];(node["shop"="supermarket"](around:5000,${lat},${lng});way["shop"="supermarket"](around:5000,${lat},${lng}););out center;`;
+        const overpassRes = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`);
+        const overpassData = await overpassRes.json();
+        
+        realMarkets = (overpassData.elements || [])
+          .map(el => {
+            const mLat = el.lat || (el.center && el.center.lat);
+            const mLng = el.lon || (el.center && el.center.lon);
+            const name = (el.tags && el.tags.name) || 'Mercado';
+            if (!mLat || !mLng) return null;
+            return { name, lat: mLat, lng: mLng, dist: haversine(lat, lng, mLat, mLng) };
+          })
+          .filter(Boolean)
+          .sort((a, b) => a.dist - b.dist)
+          .slice(0, 10);
+      } catch (overpassErr) {
+        console.warn('Overpass API failed:', overpassErr);
+      }
+
+      // Also include user-saved locations
+      const savedLocations = JSON.parse(localStorage.getItem(KEYS.LOCATIONS)) || [];
+      for (const sl of savedLocations) {
+        if (!realMarkets.find(m => m.name.toLowerCase() === sl.name.toLowerCase())) {
+          realMarkets.push({ ...sl, dist: haversine(lat, lng, sl.lat, sl.lng) });
+        }
+      }
+
+      // Sort again after merging
+      realMarkets.sort((a, b) => a.dist - b.dist);
+      
+      const nearby = realMarkets.slice(0, 10).map(c => ({
+        name: c.name,
+        distance: c.dist < 1 ? `${(c.dist * 1000).toFixed(0)}m` : `${c.dist.toFixed(1)}km`,
+        lat: c.lat,
+        lng: c.lng
+      }));
       
       setNearbyMarkets(nearby);
-      setGpsStatus(`✅ ${streetName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`} — ${nearby.length} mercados próximos!`);
+      setGpsStatus(`✅ ${streetName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`} — ${nearby.length} mercados reais encontrados!`);
 
       // Add "Current Location" as a pseudo-market for registration
       setNearbyMarkets(prev => [
