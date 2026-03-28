@@ -24,6 +24,7 @@ const KEYS = {
   CURRENT: 'mercado_current_v6',
   HISTORY: 'mercado_history_v6',
   MARKETS: 'mercado_settings_v6',
+  LOCATIONS: 'mercado_locations_v6',
   LAST_SCAN: 'mercado_last_scan',
   THEME: 'mercado_theme'
 };
@@ -133,11 +134,6 @@ function App() {
   const [currentList, setCurrentList] = useState([]);
   const [historyList, setHistoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem(KEYS.THEME);
-    if (saved) return saved === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
 
   // UI State
   const [view, setView] = useState('home'); // 'home', 'shopping', 'history', 'settings'
@@ -171,16 +167,6 @@ function App() {
 
   // Scanner State
   const [isScanning, setIsScanning] = useState(false);
-
-  // Update document theme
-  useEffect(() => {
-    localStorage.setItem(KEYS.THEME, darkMode ? 'dark' : 'light');
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   // Auto-finish and confetti logic
   useEffect(() => {
@@ -418,7 +404,7 @@ function App() {
       setGpsStatus(`📍 Posição: ${lat.toFixed(4)}, ${lng.toFixed(4)} — Buscando mercados...`);
       
       // Known supermarket chains in the São Paulo / Grande SP region
-      const knownChains = [
+      const defaultChains = [
         { name: 'Nagumo', lat: -23.5630, lng: -46.5650 },
         { name: 'Higas', lat: -23.5510, lng: -46.5540 },
         { name: 'Sonda', lat: -23.5505, lng: -46.6340 },
@@ -430,6 +416,16 @@ function App() {
         { name: 'Dia', lat: -23.5540, lng: -46.6410 },
         { name: 'Tenda Atacado', lat: -23.5450, lng: -46.5900 },
       ];
+
+      const savedLocations = JSON.parse(localStorage.getItem(KEYS.LOCATIONS)) || [];
+      const knownChains = [...savedLocations];
+      
+      // Add defaults if they haven't been overridden by the user
+      for (const dc of defaultChains) {
+        if (!knownChains.find(l => l.name.toLowerCase() === dc.name.toLowerCase())) {
+          knownChains.push(dc);
+        }
+      }
       
       // Calculate distance and sort by proximity
       const toRad = (v) => (v * Math.PI) / 180;
@@ -636,7 +632,7 @@ function App() {
   // ══════════════════════════════════════════
   
   return (
-    <div className="flex flex-col h-screen max-h-screen bg-sand-100 dark:bg-sand-900 text-black dark:text-sand-100 overflow-hidden select-none transition-colors duration-500">
+    <div className="flex flex-col h-screen max-h-screen bg-sand-100 text-black overflow-hidden select-none transition-colors duration-500">
       
       {/* Toast Notification */}
       {toast && (
@@ -646,22 +642,13 @@ function App() {
       )}
 
       {/* Header */}
-      <header className="shrink-0 glass border-b border-sand-400 dark:border-neutral-800 px-6 py-4 flex items-center justify-between z-50">
+      <header className="shrink-0 glass border-b border-sand-400 px-6 py-4 flex items-center justify-between z-50">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white shadow-sm">
             <ShoppingCart size={18} />
           </div>
           <div className="flex items-center gap-2">
-            <h1 className="text-lg font-black tracking-tight dark:text-white">Lista de Mercado</h1>
-            <button 
-              onClick={() => {
-                setDarkMode(!darkMode);
-                Haptics.impact({ style: ImpactStyle.Light });
-              }}
-              className="p-2 rounded-lg bg-sand-100 dark:bg-neutral-800 text-sand-500 hover:text-black dark:hover:text-white transition-colors"
-            >
-              {darkMode ? <Zap size={18} className="text-yellow-400" /> : <Clock size={18} />}
-            </button>
+            <h1 className="text-lg font-black tracking-tight text-black">Lista de Mercado</h1>
             {isScanning && (
               <div className="flex items-center gap-1 bg-sand-100 px-2 py-0.5 rounded-full border border-sand-200">
                 <Zap size={10} className="text-brand-500 animate-pulse" />
@@ -715,7 +702,7 @@ function App() {
                   {categories.map(c => (
                     <button key={c} onClick={() => setActiveCategory(c)}
                       className={`whitespace-nowrap px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider border transition-all ${
-                        activeCategory === c ? 'bg-neutral-900 text-white border-neutral-900' : 'bg-white text-black border-sand-400'
+                        activeCategory === c ? 'bg-black text-white border-neutral-900' : 'bg-white text-black border-sand-400'
                       }`}
                     >{c}</button>
                   ))}
@@ -744,7 +731,7 @@ function App() {
                       <p className="text-xs text-black">Produto não encontrado no catálogo.</p>
                       <button 
                         onClick={() => openConfig({ id: Date.now(), name: searchTerm, category: 'Outros', nagumoPrice: 0, higasPrice: 0, unit: 'un' })}
-                        className="text-[10px] font-black bg-neutral-900 text-white px-4 py-2 rounded-lg uppercase tracking-widest"
+                        className="text-[10px] font-black bg-black text-white px-4 py-2 rounded-lg uppercase tracking-widest"
                       >
                         Criar Novo "{searchTerm}"
                       </button>
@@ -856,7 +843,7 @@ function App() {
                            setHistoryList(prev => prev.map(list => list.id === h.id ? {...list, items} : list));
                            setActiveShoppingId(h.id);
                            setView('shopping');
-                         }} className="bg-neutral-900 text-white px-4 py-2 rounded-lg text-[9px] font-bold uppercase tracking-widest mt-2">
+                         }} className="bg-black text-white px-4 py-2 rounded-lg text-[9px] font-bold uppercase tracking-widest mt-2">
                            Re-Comprar
                          </button>
                       </div>
@@ -877,7 +864,7 @@ function App() {
              if (!activeShop) return (
                 <div className="py-20 text-center space-y-4">
                    <p className="text-xs font-medium text-black">Selecione uma lista no histórico para iniciar as compras.</p>
-                   <button onClick={() => setView('history')} className="text-[10px] font-black bg-neutral-900 text-white px-4 py-2 rounded-lg uppercase tracking-widest">Ver Histórico</button>
+                   <button onClick={() => setView('history')} className="text-[10px] font-black bg-black text-white px-4 py-2 rounded-lg uppercase tracking-widest">Ver Histórico</button>
                 </div>
              );
 
@@ -887,7 +874,7 @@ function App() {
 
              return (
                <div className="space-y-6 animate-slide-up">
-                  <div className="bg-neutral-900 rounded-2xl p-6 text-white shadow-xl">
+                  <div className="bg-black rounded-2xl p-6 text-white shadow-xl">
                      <p className="text-[9px] font-black uppercase tracking-widest text-sand-500 mb-1">Modo Supermercado</p>
                      <div className="flex justify-between items-start">
                         <h2 className="text-xl font-black">{activeShop.name || "Lista Aberta"}</h2>
@@ -950,7 +937,7 @@ function App() {
 
            {/* Shopping Finished Modal */}
            {showCongratsModal && (
-             <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[300] flex items-center justify-center p-6 animate-fade-in">
+             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] flex items-center justify-center p-6 animate-fade-in">
                <div className="bg-white w-full max-w-[320px] rounded-3xl p-8 py-10 text-center space-y-6 shadow-2xl relative overflow-hidden">
                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-50 rounded-full blur-2xl"></div>
                  <div className="absolute bottom-0 -left-10 w-24 h-24 bg-yellow-50 rounded-full blur-xl"></div>
@@ -966,7 +953,7 @@ function App() {
                      setShowCongratsModal(false);
                      setView('home');
                    }}
-                   className="relative z-10 w-full bg-neutral-900 text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-premium active:scale-95 transition-all outline-none"
+                   className="relative z-10 w-full bg-black text-white py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-premium active:scale-95 transition-all outline-none"
                  >
                    Voltar ao Início
                  </button>
@@ -984,7 +971,7 @@ function App() {
                 <div className="pt-8 w-full max-w-xs">
                   <button 
                     onClick={() => setView('home')}
-                    className="bg-neutral-900 text-white px-8 py-4 rounded-xl font-bold text-sm shadow-premium active:scale-95 transition-all w-full"
+                    className="bg-black text-white px-8 py-4 rounded-xl font-bold text-sm shadow-premium active:scale-95 transition-all w-full"
                   >
                     Fazer Nova Lista
                   </button>
@@ -1051,7 +1038,7 @@ function App() {
                           el.value = '';
                           showToast(`${val} adicionado!`);
                         }}
-                        className="bg-neutral-900 text-white px-5 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium active:scale-95"
+                        className="bg-black text-white px-5 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium active:scale-95"
                       >
                         Add
                       </button>
@@ -1067,7 +1054,7 @@ function App() {
                   <p className="text-xs text-black leading-relaxed">Busca automática nos sites e PDFs de encartes dos mercados. Lê cartazes de preços, promoções e atualiza o catálogo.</p>
                   
                   {scanLog.length > 0 && (
-                    <div className="bg-neutral-900 rounded-xl p-4 max-h-48 overflow-y-auto">
+                    <div className="bg-black rounded-xl p-4 max-h-48 overflow-y-auto">
                       {scanLog.map((log, i) => (
                         <p key={i} className="text-[10px] text-green-400 font-mono leading-relaxed">{log}</p>
                       ))}
@@ -1112,14 +1099,20 @@ function App() {
                           <button 
                             onClick={() => {
                               if (nm.isCurrent) {
-                                const newName = prompt("Nome do mercado nesta localização:", "Meu Mercado Local");
+                                const newName = prompt("Nome do mercado nesta localização (ex: Higas):", "Meu Mercado");
                                 if (newName) {
+                                  // Add to markets list
                                   if (!markets.includes(newName)) {
                                     setMarkets(prev => [...prev, newName]);
-                                    showToast(`${newName} adicionado com sua localização atual!`);
-                                  } else {
-                                    showToast(`${newName} já está na lista.`);
                                   }
+                                  
+                                  // Save coordinates locally so GPS calculates correct distance next time
+                                  const savedLocs = JSON.parse(localStorage.getItem(KEYS.LOCATIONS)) || [];
+                                  const updatedLocs = savedLocs.filter(l => l.name !== newName);
+                                  updatedLocs.push({ name: newName, lat: nm.lat, lng: nm.lng });
+                                  localStorage.setItem(KEYS.LOCATIONS, JSON.stringify(updatedLocs));
+                                  
+                                  showToast(`${newName} atualizado com sua localização EXATA!`);
                                 }
                               } else {
                                 if (!markets.includes(nm.name)) {
@@ -1156,7 +1149,7 @@ function App() {
       </main>
 
       {/* Footer Totalizer / Float Action */}
-      <footer className="shrink-0 glass border-t border-sand-400 dark:border-neutral-800 px-6 py-6 pb-12 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] z-50">
+      <footer className="shrink-0 glass border-t border-sand-400 px-6 py-6 pb-12 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] z-50">
         <div className="max-w-xl mx-auto flex items-center justify-between">
           <div className="space-y-0.5">
             <p className="text-[9px] font-black text-black uppercase tracking-widest">Total Estimado</p>
@@ -1165,7 +1158,7 @@ function App() {
           <button 
             disabled={view !== 'home' || currentList.length === 0}
             onClick={() => setShowFinalizeModal(true)}
-            className="bg-neutral-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm shadow-premium active:scale-95 disabled:opacity-20 transition-all flex items-center gap-2"
+            className="bg-black text-white px-8 py-3.5 rounded-xl font-bold text-sm shadow-premium active:scale-95 disabled:opacity-20 transition-all flex items-center gap-2"
           >
             Criar Lista <ChevronRight size={16} />
           </button>
@@ -1174,7 +1167,7 @@ function App() {
 
       {/* Selection Modal (Detail View) */}
       {selectedProduct && (
-        <div className="fixed inset-0 bg-neutral-900/40 backdrop-blur-sm z-[200] flex items-end sm:items-center justify-center px-4" onClick={() => setSelectedProduct(null)}>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200] flex items-end sm:items-center justify-center px-4" onClick={() => setSelectedProduct(null)}>
           <div className="bg-white w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-8 space-y-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex flex-col items-center text-center gap-4">
                <div className="w-32 h-32 bg-sand-100 rounded-3xl overflow-hidden shadow-lg border-4 border-white">
@@ -1247,7 +1240,7 @@ function App() {
                            </div>
                            <button 
                              onClick={() => confirmAdd(m, config.marketPrices[m] || 0)}
-                             className="bg-neutral-900 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
+                             className="bg-black text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
                            >
                              Adicionar
                            </button>
@@ -1264,7 +1257,7 @@ function App() {
 
       {/* WhatsApp Contacts Picker Modal */}
       {showContactsModal && (
-         <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[300] flex flex-col justify-end sm:justify-center px-4 animate-slide-up">
+         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] flex flex-col justify-end sm:justify-center px-4 animate-slide-up">
             <div className="bg-sand-100 w-full max-w-sm mx-auto sm:rounded-3xl rounded-t-3xl pt-6 pb-8 space-y-4 shadow-2xl h-[85vh] flex flex-col">
                <div className="px-6 flex justify-between items-center shrink-0">
                   <div>
@@ -1330,7 +1323,7 @@ function App() {
 
       {/* Finalize Naming Modal */}
       {showFinalizeModal && (
-         <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[300] flex items-center justify-center px-4 animate-slide-up">
+         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] flex items-center justify-center px-4 animate-slide-up">
             <div className="bg-white w-full max-w-sm rounded-[2rem] p-8 space-y-6 shadow-2xl">
                <div className="text-center space-y-2">
                   <h2 className="text-xl font-black text-black">Salvar Lista</h2>
