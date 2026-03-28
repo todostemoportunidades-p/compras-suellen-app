@@ -401,7 +401,22 @@ function App() {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
       
-      setGpsStatus(`📍 Posição: ${lat.toFixed(4)}, ${lng.toFixed(4)} — Buscando mercados...`);
+      setGpsStatus(`📍 Posição: ${lat.toFixed(4)}, ${lng.toFixed(4)} — Buscando endereço...`);
+
+      // Reverse geocoding to get street name
+      let streetName = '';
+      try {
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, {
+          headers: { 'Accept-Language': 'pt-BR' }
+        });
+        const geoData = await geoRes.json();
+        const addr = geoData.address || {};
+        streetName = [addr.road, addr.neighbourhood, addr.suburb, addr.city].filter(Boolean).join(', ');
+        setGpsStatus(`📍 ${streetName || geoData.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`} — Buscando mercados...`);
+      } catch (geoErr) {
+        console.warn('Geocoding failed:', geoErr);
+        setGpsStatus(`📍 Posição: ${lat.toFixed(6)}, ${lng.toFixed(6)} — Buscando mercados...`);
+      }
       
       // Known supermarket chains in the São Paulo / Grande SP region
       const defaultChains = [
@@ -447,11 +462,11 @@ function App() {
         }));
       
       setNearbyMarkets(nearby);
-      setGpsStatus(`✅ ${nearby.length} mercados encontrados próximos!`);
+      setGpsStatus(`✅ ${streetName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`} — ${nearby.length} mercados próximos!`);
 
       // Add "Current Location" as a pseudo-market for registration
       setNearbyMarkets(prev => [
-        { name: "📍 Minha Localização Atual", distance: "0m", lat, lng, isCurrent: true },
+        { name: `📍 ${streetName || 'Minha Localização Atual'}`, distance: "0m", lat, lng, isCurrent: true },
         ...prev
       ]);
       
