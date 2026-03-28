@@ -6,23 +6,36 @@
   --color-sand-200: #fbfaf5;
   --color-sand-300: #f9f9f2;
   --color-sand-400: #f5f4e8;
-  --color-pastel-green-50: #f0fdf4;
-  --color-pastel-green-100: #dcfce7;
-  --color-pastel-green-500: #77dd77;
-  --color-pastel-green-600: #5cb85c;
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-accent-green-50: #f0fdf4;
+  --color-accent-green-100: #dcfce7;
+  --color-accent-green-500: #77dd77;
+  --color-accent-green-600: #5cb85c;
   
-  --shadow-premium: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.01);
-  --shadow-active: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
+  --shadow-premium: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-active: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   
-  --radius-app: 1.25rem;
-  --radius-card: 1rem;
+  --radius-app: 2rem;
+  --radius-card: 1.5rem;
 }
 
 :root {
-  --background: #fdfdfb;
-  --foreground: #1a1a1a;
+  --background: #fbfaf5; /* Sand 200 */
+  --foreground: #000000; /* Pure Black for max contrast */
   --card-bg: #ffffff;
-  --card-border: #f1f1ee;
+  --card-border: #f5f4e8; /* Sand 400 */
+  --accent: #3b82f6;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+  --card-bg: #141414;
+  --card-border: #1f1f1f;
+  --accent: #5cb85c;
 }
 
 body {
@@ -31,12 +44,25 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   margin: 0;
   padding: 0;
-  /* Prevent ghost scrolling on mobile */
   overscroll-behavior-y: contain;
   overflow: hidden;
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Custom Scrollbar for a clean look */
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+  background: rgba(20, 20, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -47,21 +73,6 @@ body {
   background: #e5e7eb;
   border-radius: 10px;
 }
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Animations */
-@keyframes slideUp {
-  from { transform: translateY(10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.animate-slide-up {
-  animation: slideUp 0.3s ease-out forwards;
+.dark ::-webkit-scrollbar-thumb {
+  background: #333;
 }

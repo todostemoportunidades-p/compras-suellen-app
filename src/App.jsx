@@ -12,6 +12,8 @@ import confetti from 'canvas-confetti';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { Contacts } from '@capacitor-community/contacts';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { motion, AnimatePresence } from 'framer-motion';
 import baseProducts from './data/products.json';
 import { scanAllMarkets, applyPriceUpdates, shouldAutoScan } from './services/priceScanner';
 
@@ -20,9 +22,10 @@ const KEYS = {
   PRODUCTS: 'mercado_products_v6',
   LISTS: 'mercado_lists_v6',
   CURRENT: 'mercado_current_v6',
-  MARKETS: 'mercado_stores_v6',
-  LAST_REFRESH: 'mercado_last_refresh_v6',
-  LAST_SCAN: 'mercado_last_scan_v6',
+  HISTORY: 'mercado_history_v6',
+  MARKETS: 'mercado_settings_v6',
+  LAST_SCAN: 'mercado_last_scan',
+  THEME: 'mercado_theme'
 };
 
 // ─── UTILS ───
@@ -130,12 +133,18 @@ function App() {
   const [currentList, setCurrentList] = useState([]);
   const [historyList, setHistoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem(KEYS.THEME);
+    if (saved) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   // UI State
   const [view, setView] = useState('home'); // 'home', 'shopping', 'history', 'settings'
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Todas');
   const [toast, setToast] = useState(null);
+  const [scanLog, setScanLog] = useState([]);
   
   // Selection/Naming Flow State
   const [selectedProduct, setSelectedProduct] = useState(null); // The one being 'configured' to add
@@ -163,6 +172,16 @@ function App() {
   // Scanner State
   const [isScanning, setIsScanning] = useState(false);
 
+  // Update document theme
+  useEffect(() => {
+    localStorage.setItem(KEYS.THEME, darkMode ? 'dark' : 'light');
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
   // Auto-finish and confetti logic
   useEffect(() => {
     if (view === 'shopping' && activeShoppingId) {
@@ -170,14 +189,13 @@ function App() {
        if (list && list.items.length > 0 && list.items.every(i => i.checked)) {
           if (!showCongratsModal) {
              setShowCongratsModal(true);
-             const duration = 2.5 * 1000;
-             const end = Date.now() + duration;
-             const frame = () => {
-               confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#4ade80', '#22c55e', '#16a34a', '#facc15', '#a855f7'], zIndex: 1000 });
-               confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#4ade80', '#22c55e', '#16a34a', '#facc15', '#a855f7'], zIndex: 1000 });
-               if (Date.now() < end) requestAnimationFrame(frame);
-             };
-             frame();
+             Haptics.notification({ style: ImpactStyle.Heavy });
+             confetti({
+               particleCount: 150,
+               spread: 70,
+               origin: { y: 0.6 },
+               colors: ['#77dd77', '#fdfd96', '#84b6f4', '#ffb7ce']
+             });
           }
        }
     }
@@ -331,8 +349,8 @@ function App() {
 
   const syncPriceCards = async () => {
     setRefreshing(true);
-    setScanLog(['🚀 Iniciando varredura automática de preços...']);
-    
+    // setScanLog(['🚀 Iniciando varredura automática de preços...']); // Removed as scanLog state is not defined
+
     try {
       const allUpdates = await scanAllMarkets(markets, products, (msg) => {
         setScanLog(prev => [...prev.slice(-15), msg]); // Keep last 15 messages
@@ -354,7 +372,7 @@ function App() {
       
     } catch (err) {
       console.error('Scan error:', err);
-      setScanLog(prev => [...prev, `❌ Erro: ${err.message}`]);
+      // setScanLog(prev => [...prev, `❌ Erro: ${err.message}`]); // Removed as scanLog state is not defined
       showToast('Erro na varredura de preços.');
     }
     
@@ -434,6 +452,12 @@ function App() {
       
       setNearbyMarkets(nearby);
       setGpsStatus(`✅ ${nearby.length} mercados encontrados próximos!`);
+
+      // Add "Current Location" as a pseudo-market for registration
+      setNearbyMarkets(prev => [
+        { name: "📍 Minha Localização Atual", distance: "0m", lat, lng, isCurrent: true },
+        ...prev
+      ]);
       
     } catch (err) {
       console.error('GPS Error:', err);
@@ -612,60 +636,76 @@ function App() {
   // ══════════════════════════════════════════
   
   return (
-    <div className="flex flex-col h-screen max-h-screen bg-sand-200 text-neutral-900 overflow-hidden select-none">
+    <div className="flex flex-col h-screen max-h-screen bg-sand-100 dark:bg-sand-900 text-black dark:text-sand-100 overflow-hidden select-none transition-colors duration-500">
       
       {/* Toast Notification */}
       {toast && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] bg-neutral-900 text-white px-6 py-2.5 rounded-full text-xs font-bold shadow-premium animate-slide-up flex items-center gap-2">
-          <CheckCircle2 size={14} className="text-pastel-green-500" /> {toast}
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] bg-black text-white px-6 py-2.5 rounded-full text-xs font-bold shadow-premium animate-slide-up flex items-center gap-2">
+          <CheckCircle2 size={14} className="text-accent-green-500" /> {toast}
         </div>
       )}
 
       {/* Header */}
-      <header className="shrink-0 bg-white border-b border-sand-400 px-6 py-4 flex items-center justify-between">
+      <header className="shrink-0 glass border-b border-sand-400 dark:border-neutral-800 px-6 py-4 flex items-center justify-between z-50">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-pastel-green-500 rounded-lg flex items-center justify-center text-white shadow-sm">
+          <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white shadow-sm">
             <ShoppingCart size={18} />
           </div>
           <div className="flex items-center gap-2">
-            <h1 className="text-lg font-black tracking-tight">Lista de Mercado</h1>
+            <h1 className="text-lg font-black tracking-tight dark:text-white">Lista de Mercado</h1>
+            <button 
+              onClick={() => {
+                setDarkMode(!darkMode);
+                Haptics.impact({ style: ImpactStyle.Light });
+              }}
+              className="p-2 rounded-lg bg-sand-100 dark:bg-neutral-800 text-sand-500 hover:text-black dark:hover:text-white transition-colors"
+            >
+              {darkMode ? <Zap size={18} className="text-yellow-400" /> : <Clock size={18} />}
+            </button>
             {isScanning && (
-              <div className="flex items-center gap-1 bg-neutral-100 px-2 py-0.5 rounded-full border border-neutral-200">
-                <Zap size={10} className="text-pastel-green-500 animate-pulse" />
-                <span className="text-[8px] font-black uppercase tracking-tighter text-neutral-400">Sync...</span>
+              <div className="flex items-center gap-1 bg-sand-100 px-2 py-0.5 rounded-full border border-sand-200">
+                <Zap size={10} className="text-brand-500 animate-pulse" />
+                <span className="text-[8px] font-black uppercase tracking-tighter text-black">Sync...</span>
               </div>
             )}
           </div>
         </div>
         <div className="flex gap-2">
-          <button onClick={shareApp} title="Compartilhar App" className="p-2 rounded-lg transition-all text-neutral-400 hover:text-pastel-green-600">
+          <button onClick={shareApp} title="Compartilhar App" className="p-2 rounded-lg transition-all text-black hover:text-brand-600">
             <Share2 size={20} />
           </button>
-          <button onClick={() => setView('home')} title="Início" className={`p-2 rounded-lg transition-all ${view === 'home' ? 'bg-pastel-green-100 text-pastel-green-700' : 'text-neutral-400'}`}>
+          <button onClick={() => setView('home')} title="Início" className={`p-2 rounded-lg transition-all ${view === 'home' ? 'bg-brand-100 text-brand-600' : 'text-black'}`}>
             <LayoutGrid size={20} />
           </button>
-          <button onClick={() => setView('history')} title="Histórico" className={`p-2 rounded-lg transition-all ${view === 'history' ? 'bg-pastel-green-100 text-pastel-green-700' : 'text-neutral-400'}`}>
+          <button onClick={() => setView('history')} title="Histórico" className={`p-2 rounded-lg transition-all ${view === 'history' ? 'bg-brand-100 text-brand-600' : 'text-black'}`}>
             <History size={20} />
           </button>
-          <button onClick={() => setView('settings')} title="Configurações" className={`p-2 rounded-lg transition-all ${view === 'settings' ? 'bg-pastel-green-100 text-pastel-green-700' : 'text-neutral-400'}`}>
+          <button onClick={() => setView('settings')} title="Configurações" className={`p-2 rounded-lg transition-all ${view === 'settings' ? 'bg-brand-100 text-brand-600' : 'text-black'}`}>
             <MapPin size={20} />
           </button>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar">
-        <div className="max-w-xl mx-auto p-5 pb-40 space-y-6">
-
-          {view === 'home' && (
+      <main className="flex-1 overflow-y-auto p-6 relative">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={view}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="pb-20"
+          >
+            {view === 'home' && (
             <>
               {/* Search Section */}
               <section className="space-y-4">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-300" size={18} />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-sand-500" size={18} />
                   <input 
                     type="text" placeholder="Buscar produtos (carne, fruta...)"
-                    className="w-full bg-white border border-sand-400 rounded-xl py-3.5 pl-11 pr-4 text-sm font-medium focus:ring-1 ring-pastel-green-400 outline-none transition-all placeholder:text-neutral-300 shadow-premium"
+                    className="w-full bg-white border border-sand-400 rounded-xl py-3.5 pl-11 pr-4 text-sm font-medium focus:ring-1 ring-brand-500 outline-none transition-all placeholder:text-sand-500 shadow-premium"
                     value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
                   />
                 </div>
@@ -675,7 +715,7 @@ function App() {
                   {categories.map(c => (
                     <button key={c} onClick={() => setActiveCategory(c)}
                       className={`whitespace-nowrap px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider border transition-all ${
-                        activeCategory === c ? 'bg-neutral-900 text-white border-neutral-900' : 'bg-white text-neutral-400 border-sand-400'
+                        activeCategory === c ? 'bg-neutral-900 text-white border-neutral-900' : 'bg-white text-black border-sand-400'
                       }`}
                     >{c}</button>
                   ))}
@@ -685,23 +725,23 @@ function App() {
               {/* Catalog Results */}
               {(searchTerm || activeCategory !== 'Todas') && (
                 <div className="space-y-2 animate-slide-up">
-                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest px-1">Resultados Catalogados</p>
+                  <p className="text-[10px] font-black text-black uppercase tracking-widest px-1">Resultados Catalogados</p>
                   {filtered.length > 0 ? filtered.slice(0, 30).map(p => (
                     <button key={p.id} onClick={() => openConfig(p)}
-                      className="w-full bg-white p-3 rounded-xl flex items-center gap-4 border border-sand-400 hover:border-pastel-green-200 transition-all active:scale-[0.98] shadow-premium"
+                      className="w-full bg-white p-3 rounded-xl flex items-center gap-4 border border-sand-400 hover:border-brand-100 transition-all active:scale-[0.98] shadow-premium"
                     >
-                      <div className="w-12 h-12 bg-sand-200 rounded-lg overflow-hidden shrink-0">
+                      <div className="w-12 h-12 bg-sand-100 rounded-lg overflow-hidden shrink-0">
                          <img src={getProductImage(p.name)} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
                       </div>
                       <div className="text-left flex-1">
-                        <p className="text-sm font-bold text-neutral-800">{p.name}</p>
-                        <p className="text-[10px] text-neutral-400">{p.category} • Preços</p>
+                        <p className="text-sm font-bold text-black">{p.name}</p>
+                        <p className="text-[10px] text-black">{p.category} • Preços</p>
                       </div>
-                      <PlusCircle className="text-pastel-green-500" size={20} />
+                      <PlusCircle className="text-brand-500" size={20} />
                     </button>
                   )) : (
                     <div className="bg-white p-8 rounded-xl text-center border border-dashed border-sand-400 space-y-3">
-                      <p className="text-xs text-neutral-400">Produto não encontrado no catálogo.</p>
+                      <p className="text-xs text-black">Produto não encontrado no catálogo.</p>
                       <button 
                         onClick={() => openConfig({ id: Date.now(), name: searchTerm, category: 'Outros', nagumoPrice: 0, higasPrice: 0, unit: 'un' })}
                         className="text-[10px] font-black bg-neutral-900 text-white px-4 py-2 rounded-lg uppercase tracking-widest"
@@ -716,7 +756,7 @@ function App() {
               {/* My List Section */}
               <section className="space-y-4">
                 <div className="flex items-center justify-between px-1 pt-4 border-t border-sand-400">
-                  <h2 className="text-sm font-black uppercase tracking-widest text-neutral-400">Minha Lista Atual</h2>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-black">Minha Lista Atual</h2>
                   {currentList.length > 0 && (
                     <button onClick={() => setCurrentList([])} className="text-[10px] text-red-400 font-bold uppercase">Limpar tudo</button>
                   )}
@@ -724,50 +764,50 @@ function App() {
 
                 {currentList.length === 0 ? (
                   <div className="py-20 text-center space-y-4">
-                    <div className="w-16 h-16 bg-white rounded-2xl mx-auto flex items-center justify-center text-sand-400 border border-sand-400 shadow-premium opacity-50">
+                    <div className="w-16 h-16 bg-white rounded-2xl mx-auto flex items-center justify-center text-black border border-sand-400 shadow-premium opacity-50">
                       <List size={32} />
                     </div>
-                    <p className="text-xs font-medium text-neutral-400">Comece a buscar para adicionar itens.</p>
+                    <p className="text-xs font-medium text-black">Comece a buscar para adicionar itens.</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {currentList.map(item => (
                       <div key={item.id} className="bg-white rounded-xl border border-sand-400 p-4 shadow-premium group">
                         <div className="flex items-start gap-4">
-                          <div className="w-14 h-14 bg-sand-200 rounded-xl overflow-hidden shrink-0 border border-sand-300">
+                          <div className="w-14 h-14 bg-sand-100 rounded-xl overflow-hidden shrink-0 border border-sand-300">
                              <img src={getProductImage(item.name)} alt={item.name} className="w-full h-full object-cover" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-sm font-bold text-neutral-800 leading-tight">{item.name}</h3>
+                            <h3 className="text-sm font-bold text-black leading-tight">{item.name}</h3>
                             <div className="flex items-center gap-3 mt-1.5">
-                              <span className="text-[9px] font-black bg-sand-300 px-1.5 py-0.5 rounded text-neutral-500 uppercase">{item.category}</span>
+                              <span className="text-[9px] font-black bg-sand-300 px-1.5 py-0.5 rounded text-sand-500 uppercase">{item.category}</span>
                               <div className="flex items-center gap-1">
-                                <span className="text-[9px] font-bold text-neutral-400">Qtd:</span>
+                                <span className="text-[9px] font-bold text-black">Qtd:</span>
                                 <input 
                                   type="number" min="1" step="any"
-                                  className="w-12 bg-sand-200 border border-sand-400 rounded px-1 py-0.5 text-xs font-bold outline-none text-center"
+                                  className="w-12 bg-sand-100 border border-sand-400 rounded px-1 py-0.5 text-xs font-bold outline-none text-center"
                                   value={item.qty}
                                   onChange={e => {
                                     const val = Math.max(0.1, parseFloat(e.target.value) || 1);
                                     setCurrentList(l => l.map(x => x.id === item.id ? { ...x, qty: val } : x));
                                   }}
                                 />
-                                <span className="text-[9px] font-bold text-neutral-400">{item.unit}</span>
+                                <span className="text-[9px] font-bold text-black">{item.unit}</span>
                               </div>
                             </div>
                           </div>
-                          <button onClick={() => setCurrentList(l => l.filter(x => x.id !== item.id))} className="text-neutral-200 hover:text-red-400 transition-colors">
+                          <button onClick={() => setCurrentList(l => l.filter(x => x.id !== item.id))} className="text-sand-200 hover:text-red-400 transition-colors">
                             <Trash2 size={16} />
                           </button>
                         </div>
                         <div className="bg-sand-300/40 rounded-lg p-3 mt-4 flex items-center justify-between gap-2">
-                          <p className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Mercado {item.selectedMarket}</p>
+                          <p className="text-[10px] font-black uppercase text-black tracking-wider">Mercado {item.selectedMarket}</p>
                           <div className="flex items-center gap-2">
                              <div className="relative">
-                               <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-bold text-neutral-400">R$</span>
+                               <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-bold text-black">R$</span>
                                <input 
                                  type="number" step="0.01"
-                                 className="w-20 bg-white border border-sand-400 rounded px-1 pl-5 py-0.5 text-xs font-bold outline-none ring-pastel-green-400 focus:ring-1"
+                                 className="w-20 bg-white border border-sand-400 rounded px-1 pl-5 py-0.5 text-xs font-bold outline-none ring-brand-500 focus:ring-1"
                                  value={item.selectedPrice || ''}
                                  onChange={e => {
                                    const val = parseFloat(e.target.value) || 0;
@@ -775,7 +815,7 @@ function App() {
                                  }}
                                />
                              </div>
-                             <p className="text-sm font-bold text-pastel-green-600 w-20 text-right">{fmt.format(item.selectedPrice * item.qty)}</p>
+                             <p className="text-sm font-bold text-brand-600 w-20 text-right">{fmt.format(item.selectedPrice * item.qty)}</p>
                           </div>
                         </div>
                       </div>
@@ -789,7 +829,7 @@ function App() {
           {view === 'history' && (
             <div className="space-y-4 animate-slide-up">
               <div className="flex items-center justify-between">
-                 <h2 className="text-sm font-black uppercase tracking-widest text-neutral-400">Listas Passadas</h2>
+                 <h2 className="text-sm font-black uppercase tracking-widest text-black">Listas Passadas</h2>
                  {historyList.length > 0 && (
                     <button onClick={() => { if(window.confirm('Excluir todo o histórico?')) setHistoryList([]); }} 
                        className="text-[10px] text-red-500 font-bold uppercase tracking-wider">Limpar Tudo</button>
@@ -797,18 +837,18 @@ function App() {
               </div>
 
               {historyList.length === 0 ? (
-                <p className="text-center py-20 text-xs text-neutral-400">Nenhuma lista no histórico.</p>
+                <p className="text-center py-20 text-xs text-black">Nenhuma lista no histórico.</p>
               ) : historyList.map(h => (
                 <div key={h.id} className="bg-white rounded-xl border border-sand-400 p-5 shadow-premium space-y-4">
                    <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-sm font-bold text-neutral-900">{h.name || "Lista s/ nome"}</h3>
-                        <p className="text-xs font-bold text-neutral-500 mt-1">{h.date}</p>
-                        <p className="text-[10px] text-neutral-400 uppercase tracking-widest mt-0.5">{h.items.length} itens • {fmt.format(h.total)}</p>
+                        <h3 className="text-sm font-bold text-black">{h.name || "Lista s/ nome"}</h3>
+                        <p className="text-xs font-bold text-sand-500 mt-1">{h.date}</p>
+                        <p className="text-[10px] text-black uppercase tracking-widest mt-0.5">{h.items.length} itens • {fmt.format(h.total)}</p>
                       </div>
                       <div className="flex flex-col gap-2 items-end">
                          <button onClick={(e) => { e.stopPropagation(); setHistoryList(prev => prev.filter(x => x.id !== h.id)); }} 
-                            className="text-neutral-300 hover:text-red-500 transition-colors p-1">
+                            className="text-sand-500 hover:text-red-500 transition-colors p-1">
                             <Trash2 size={16} />
                          </button>
                          <button onClick={() => {
@@ -823,9 +863,9 @@ function App() {
                    </div>
                    <div className="flex gap-1 flex-wrap">
                       {h.items.slice(0, 5).map((it, i) => (
-                        <span key={i} className="text-[8px] font-black uppercase bg-sand-300 px-1.5 py-0.5 rounded text-neutral-500">{it.name}</span>
+                        <span key={i} className="text-[8px] font-black uppercase bg-sand-300 px-1.5 py-0.5 rounded text-sand-500">{it.name}</span>
                       ))}
-                      {h.items.length > 5 && <span className="text-[8px] font-black uppercase bg-sand-300 px-1.5 py-0.5 rounded text-neutral-500">+{h.items.length - 5}</span>}
+                      {h.items.length > 5 && <span className="text-[8px] font-black uppercase bg-sand-300 px-1.5 py-0.5 rounded text-sand-500">+{h.items.length - 5}</span>}
                    </div>
                 </div>
               ))}
@@ -836,7 +876,7 @@ function App() {
              const activeShop = historyList.find(h => h.id === activeShoppingId);
              if (!activeShop) return (
                 <div className="py-20 text-center space-y-4">
-                   <p className="text-xs font-medium text-neutral-400">Selecione uma lista no histórico para iniciar as compras.</p>
+                   <p className="text-xs font-medium text-black">Selecione uma lista no histórico para iniciar as compras.</p>
                    <button onClick={() => setView('history')} className="text-[10px] font-black bg-neutral-900 text-white px-4 py-2 rounded-lg uppercase tracking-widest">Ver Histórico</button>
                 </div>
              );
@@ -848,7 +888,7 @@ function App() {
              return (
                <div className="space-y-6 animate-slide-up">
                   <div className="bg-neutral-900 rounded-2xl p-6 text-white shadow-xl">
-                     <p className="text-[9px] font-black uppercase tracking-widest text-neutral-500 mb-1">Modo Supermercado</p>
+                     <p className="text-[9px] font-black uppercase tracking-widest text-sand-500 mb-1">Modo Supermercado</p>
                      <div className="flex justify-between items-start">
                         <h2 className="text-xl font-black">{activeShop.name || "Lista Aberta"}</h2>
                         <div className="flex gap-1">
@@ -862,10 +902,10 @@ function App() {
                      </div>
                      <div className="mt-4 flex items-center gap-2">
                         <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                          <div className="h-full bg-pastel-green-500 transition-all duration-700" 
+                          <div className="h-full bg-brand-500 transition-all duration-700" 
                             style={{ width: `${(checkedCount / totalItems) * 100 || 0}%` }}></div>
                         </div>
-                        <span className="text-[10px] font-black text-pastel-green-500">
+                        <span className="text-[10px] font-black text-brand-500">
                           {checkedCount} / {totalItems}
                         </span>
                      </div>
@@ -879,22 +919,25 @@ function App() {
                                 if (h.id === activeShop.id) {
                                    const newItems = [...h.items];
                                    newItems[idx].checked = !newItems[idx].checked;
+                                   if (newItems[idx].checked) {
+                                     Haptics.impact({ style: ImpactStyle.Medium });
+                                   }
                                    return {...h, items: newItems};
                                 }
                                 return h;
                              }));
                           }}
                           className={`p-4 rounded-xl border-2 transition-all flex items-center gap-4 cursor-pointer ${
-                            item.checked ? 'bg-pastel-green-50 border-pastel-green-200 opacity-60' : 'bg-white border-sand-400 shadow-premium'
+                            item.checked ? 'bg-brand-50 border-brand-100 opacity-60' : 'bg-white border-sand-400 shadow-premium'
                           }`}
                         >
                            <div className="flex-1">
-                              <p className={`text-sm font-bold transition-all ${item.checked ? 'line-through text-neutral-400' : 'text-neutral-800'}`}>{item.name}</p>
-                              <p className="text-[9px] text-neutral-400 uppercase tracking-widest mt-0.5">{item.category} • {item.qty} {item.unit} • {item.selectedMarket}</p>
-                              <p className="text-[10px] font-black text-pastel-green-600 mt-1">{fmt.format(item.selectedPrice * item.qty)}</p>
+                              <p className={`text-sm font-bold transition-all ${item.checked ? 'line-through text-black' : 'text-black'}`}>{item.name}</p>
+                              <p className="text-[9px] text-black uppercase tracking-widest mt-0.5">{item.category} • {item.qty} {item.unit} • {item.selectedMarket}</p>
+                              <p className="text-[10px] font-black text-brand-600 mt-1">{fmt.format(item.selectedPrice * item.qty)}</p>
                            </div>
                            <button className={`px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest shrink-0 transition-colors ${
-                              item.checked ? 'bg-pastel-green-500 text-white shadow-active scale-95' : 'bg-sand-300 text-neutral-500 shadow-sm'
+                              item.checked ? 'bg-brand-500 text-white shadow-active scale-95' : 'bg-sand-300 text-sand-500 shadow-sm'
                            }`}>
                               {item.checked ? 'OK ✓' : 'Marcar'}
                            </button>
@@ -909,14 +952,14 @@ function App() {
            {showCongratsModal && (
              <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[300] flex items-center justify-center p-6 animate-fade-in">
                <div className="bg-white w-full max-w-[320px] rounded-3xl p-8 py-10 text-center space-y-6 shadow-2xl relative overflow-hidden">
-                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-pastel-green-50 rounded-full blur-2xl"></div>
+                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-50 rounded-full blur-2xl"></div>
                  <div className="absolute bottom-0 -left-10 w-24 h-24 bg-yellow-50 rounded-full blur-xl"></div>
-                 <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-pastel-green-400 to-pastel-green-600 rounded-full mx-auto flex items-center justify-center text-white shadow-lg shadow-pastel-green-500/30 transform transition-transform hover:scale-110">
+                 <div className="relative z-10 w-24 h-24 bg-gradient-to-br from-brand-500 to-brand-600 rounded-full mx-auto flex items-center justify-center text-white shadow-lg shadow-brand-500/30 transform transition-transform hover:scale-110">
                    <CheckCircle2 size={48} className="animate-pulse" />
                  </div>
                  <div className="relative z-10 space-y-2">
-                   <h3 className="text-2xl font-black text-neutral-900 tracking-tight">Compra<br/>Finalizada!</h3>
-                   <p className="text-[13px] text-neutral-500 font-medium leading-relaxed px-2">Você marcou todos os itens. Parabéns pela organização e economia!</p>
+                   <h3 className="text-2xl font-black text-black tracking-tight">Compra<br/>Finalizada!</h3>
+                   <p className="text-[13px] text-sand-500 font-medium leading-relaxed px-2">Você marcou todos os itens. Parabéns pela organização e economia!</p>
                  </div>
                  <button 
                    onClick={() => {
@@ -933,11 +976,11 @@ function App() {
 
            {view === 'completed' && (
              <div className="space-y-8 animate-slide-up py-10 text-center flex flex-col items-center justify-center">
-                <div className="w-24 h-24 bg-pastel-green-100 rounded-full flex items-center justify-center shadow-lg mb-6">
-                  <CheckCircle2 size={48} className="text-pastel-green-600" />
+                <div className="w-24 h-24 bg-brand-100 rounded-full flex items-center justify-center shadow-lg mb-6">
+                  <CheckCircle2 size={48} className="text-brand-600" />
                 </div>
-                <h1 className="text-3xl font-black text-neutral-900 tracking-tighter">Parabéns!</h1>
-                <p className="text-sm text-neutral-500 max-w-xs mx-auto">Sua lista foi fechada com sucesso! O PDF foi gerado. Boas compras ou bom planejamento!</p>
+                <h1 className="text-3xl font-black text-black tracking-tighter">Parabéns!</h1>
+                <p className="text-sm text-sand-500 max-w-xs mx-auto">Sua lista foi fechada com sucesso! O PDF foi gerado. Boas compras ou bom planejamento!</p>
                 <div className="pt-8 w-full max-w-xs">
                   <button 
                     onClick={() => setView('home')}
@@ -947,7 +990,7 @@ function App() {
                   </button>
                   <button 
                     onClick={() => setView('history')}
-                    className="mt-6 text-xs font-bold text-neutral-400 hover:text-neutral-900 transition-colors w-full"
+                    className="mt-6 text-xs font-bold text-black hover:text-black transition-colors w-full"
                   >
                     Ver Histórico de Compras
                   </button>
@@ -958,16 +1001,16 @@ function App() {
            {view === 'settings' && (
              <div className="space-y-6 animate-slide-up pb-20">
                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-black uppercase tracking-widest text-neutral-400">Meus Supermercados</h2>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-black">Meus Supermercados</h2>
                </div>
 
                <div className="bg-white rounded-xl border border-sand-400 p-6 shadow-premium space-y-4">
-                  <p className="text-xs text-neutral-400 font-medium leading-relaxed">Adicione os mercados que você costuma visitar. O app permitirá comparar preços e abrir a busca de cada um.</p>
+                  <p className="text-xs text-black font-medium leading-relaxed">Adicione os mercados que você costuma visitar. O app permitirá comparar preços e abrir a busca de cada um.</p>
                   
                   <div className="space-y-2">
                     {markets.map(m => (
-                      <div key={m} className="flex items-center justify-between bg-sand-200 p-3 rounded-xl border border-sand-400">
-                        <span className="text-sm font-bold text-neutral-800">{m}</span>
+                      <div key={m} className="flex items-center justify-between bg-sand-100 p-3 rounded-xl border border-sand-400">
+                        <span className="text-sm font-bold text-black">{m}</span>
                         <button 
                           onClick={() => {
                             if (markets.length <= 1) return showToast("Mantenha ao menos um mercado.");
@@ -982,11 +1025,11 @@ function App() {
                   </div>
 
                   <div className="pt-4 border-t border-sand-400">
-                    <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-2 ml-1">Adicionar Novo Mercado</p>
+                    <p className="text-[10px] font-black uppercase text-black tracking-widest mb-2 ml-1">Adicionar Novo Mercado</p>
                     <div className="flex gap-2">
                       <input 
                         type="text" id="newStoreInput" placeholder="Ex: Sonda, Carrefour..."
-                        className="flex-1 bg-sand-300 rounded-xl py-2.5 px-4 text-sm font-bold outline-none border border-sand-400 focus:ring-1 ring-pastel-green-500"
+                        className="flex-1 bg-sand-300 rounded-xl py-2.5 px-4 text-sm font-bold outline-none border border-sand-400 focus:ring-1 ring-brand-500"
                         onKeyDown={e => {
                           if (e.key === 'Enter') {
                             const val = e.target.value.trim();
@@ -1018,10 +1061,10 @@ function App() {
 
                <div className="bg-white rounded-xl border border-sand-400 p-6 shadow-premium space-y-4">
                   <div className="flex items-center gap-2">
-                    <Zap size={18} className="text-pastel-green-500" />
+                    <Zap size={18} className="text-brand-500" />
                     <h3 className="text-sm font-bold">Automação de Encartes</h3>
                   </div>
-                  <p className="text-xs text-neutral-400 leading-relaxed">Busca automática nos sites e PDFs de encartes dos mercados. Lê cartazes de preços, promoções e atualiza o catálogo.</p>
+                  <p className="text-xs text-black leading-relaxed">Busca automática nos sites e PDFs de encartes dos mercados. Lê cartazes de preços, promoções e atualiza o catálogo.</p>
                   
                   {scanLog.length > 0 && (
                     <div className="bg-neutral-900 rounded-xl p-4 max-h-48 overflow-y-auto">
@@ -1034,12 +1077,12 @@ function App() {
                   <button 
                     disabled={refreshing}
                     onClick={syncPriceCards}
-                    className="w-full bg-pastel-green-600 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-premium active:scale-95 transition-all disabled:opacity-50"
+                    className="w-full bg-brand-600 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-premium active:scale-95 transition-all disabled:opacity-50"
                   >
                     {refreshing ? <RefreshCw size={14} className="animate-spin" /> : <ShieldCheck size={14} />} 
                     {refreshing ? 'Escaneando...' : 'Escanear Todos os Mercados'}
                   </button>
-                  <p className="text-[9px] text-center text-neutral-400">
+                  <p className="text-[9px] text-center text-black">
                     Última varredura: {localStorage.getItem(KEYS.LAST_SCAN) 
                       ? new Date(localStorage.getItem(KEYS.LAST_SCAN)).toLocaleString('pt-BR') 
                       : 'Nunca'} • Auto: a cada 12h
@@ -1048,34 +1091,47 @@ function App() {
 
                <div className="bg-white rounded-xl border border-sand-400 p-6 shadow-premium space-y-4">
                   <div className="flex items-center gap-2">
-                    <Navigation size={18} className="text-pastel-green-500" />
+                    <Navigation size={18} className="text-brand-500" />
                     <h3 className="text-sm font-bold">Localização GPS</h3>
                   </div>
-                  <p className="text-xs text-neutral-400 leading-relaxed">Use o GPS do aparelho para localizar supermercados próximos e adicioná-los automaticamente à sua lista.</p>
+                  <p className="text-xs text-black leading-relaxed">Use o GPS do aparelho para localizar supermercados próximos e adicioná-los automaticamente à sua lista.</p>
                   {gpsStatus && (
-                    <div className="bg-sand-200 border border-sand-400 rounded-lg p-3">
-                      <p className="text-[10px] text-neutral-500 font-bold">{gpsStatus}</p>
+                    <div className="bg-sand-100 border border-sand-400 rounded-lg p-3">
+                      <p className="text-[10px] text-sand-500 font-bold">{gpsStatus}</p>
                     </div>
                   )}
                   {nearbyMarkets.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest ml-1">Mercados Próximos Encontrados:</p>
+                      <p className="text-[9px] font-black uppercase text-black tracking-widest ml-1">Mercados Próximos Encontrados:</p>
                       {nearbyMarkets.map((nm, idx) => (
-                        <div key={idx} className="flex items-center justify-between bg-pastel-green-50 border border-pastel-green-200 p-3 rounded-xl">
+                        <div key={idx} className="flex items-center justify-between bg-brand-50 border border-brand-100 p-3 rounded-xl">
                           <div>
-                            <span className="text-xs font-bold text-neutral-800 block">{nm.name}</span>
-                            <span className="text-[9px] text-neutral-400">{nm.distance}</span>
+                            <span className="text-xs font-bold text-black block">{nm.name}</span>
+                            <span className="text-[9px] text-black">{nm.distance}</span>
                           </div>
                           <button 
                             onClick={() => {
-                              if (!markets.includes(nm.name)) {
-                                setMarkets(prev => [...prev, nm.name]);
-                                showToast(`${nm.name} adicionado!`);
+                              if (nm.isCurrent) {
+                                const newName = prompt("Nome do mercado nesta localização:", "Meu Mercado Local");
+                                if (newName) {
+                                  if (!markets.includes(newName)) {
+                                    setMarkets(prev => [...prev, newName]);
+                                    showToast(`${newName} adicionado com sua localização atual!`);
+                                  } else {
+                                    showToast(`${newName} já está na lista.`);
+                                  }
+                                }
                               } else {
-                                showToast(`${nm.name} já está na lista.`);
+                                if (!markets.includes(nm.name)) {
+                                  setMarkets(prev => [...prev, nm.name]);
+                                  showToast(`${nm.name} adicionado!`);
+                                } else {
+                                  showToast(`${nm.name} já está na lista.`);
+                                }
                               }
+                              Haptics.impact({ style: ImpactStyle.Medium });
                             }}
-                            className="bg-pastel-green-600 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest active:scale-95"
+                            className="bg-brand-600 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest active:scale-95"
                           >
                             <Plus size={12} />
                           </button>
@@ -1086,7 +1142,7 @@ function App() {
                   <button 
                     disabled={gpsLoading}
                     onClick={findNearbyMarkets}
-                    className="w-full bg-pastel-green-50 text-pastel-green-600 border border-pastel-green-200 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
+                    className="w-full bg-brand-50 text-brand-600 border border-brand-100 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
                   >
                     {gpsLoading ? <RefreshCw size={14} className="animate-spin" /> : <MapPin size={14} />} 
                     {gpsLoading ? 'Buscando...' : 'Buscar Mercados Próximos'}
@@ -1095,14 +1151,15 @@ function App() {
              </div>
            )}
 
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Footer Totalizer / Float Action */}
-      <footer className="shrink-0 bg-white border-t border-sand-400 px-6 py-6 pb-12 shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
+      <footer className="shrink-0 glass border-t border-sand-400 dark:border-neutral-800 px-6 py-6 pb-12 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] z-50">
         <div className="max-w-xl mx-auto flex items-center justify-between">
           <div className="space-y-0.5">
-            <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">Total Estimado</p>
+            <p className="text-[9px] font-black text-black uppercase tracking-widest">Total Estimado</p>
             <p className="text-2xl font-black tracking-tight">{fmt.format(displayTotal)}</p>
           </div>
           <button 
@@ -1120,22 +1177,22 @@ function App() {
         <div className="fixed inset-0 bg-neutral-900/40 backdrop-blur-sm z-[200] flex items-end sm:items-center justify-center px-4" onClick={() => setSelectedProduct(null)}>
           <div className="bg-white w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-8 space-y-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex flex-col items-center text-center gap-4">
-               <div className="w-32 h-32 bg-sand-200 rounded-3xl overflow-hidden shadow-lg border-4 border-white">
+               <div className="w-32 h-32 bg-sand-100 rounded-3xl overflow-hidden shadow-lg border-4 border-white">
                   <img src={getProductImage(selectedProduct.name)} alt={selectedProduct.name} className="w-full h-full object-cover" />
                </div>
                <div className="w-full flex justify-between items-start">
                   <div className="text-left">
-                     <h2 className="text-base font-black text-neutral-900">{selectedProduct.name}</h2>
-                     <p className="text-xs text-neutral-400">{selectedProduct.category}</p>
+                     <h2 className="text-base font-black text-black">{selectedProduct.name}</h2>
+                     <p className="text-xs text-black">{selectedProduct.category}</p>
                   </div>
-                  <button onClick={() => setSelectedProduct(null)} className="p-2 bg-sand-300 rounded-lg text-neutral-500"><X size={18} /></button>
+                  <button onClick={() => setSelectedProduct(null)} className="p-2 bg-sand-300 rounded-lg text-sand-500"><X size={18} /></button>
                </div>
             </div>
 
             <div className="space-y-4">
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                     <label className="text-[9px] font-black uppercase text-neutral-400 tracking-widest ml-1">Quantidade</label>
+                     <label className="text-[9px] font-black uppercase text-black tracking-widest ml-1">Quantidade</label>
                      <div className="flex items-center bg-sand-300 rounded-xl p-1 gap-2">
                         <button onClick={() => setConfig(c => ({...c, qty: Math.max(1, c.qty - 1)}))} className="w-8 h-8 bg-white rounded-lg font-black shadow-sm">-</button>
                         <span className="flex-1 text-center font-black text-sm">{config.qty}</span>
@@ -1143,7 +1200,7 @@ function App() {
                      </div>
                   </div>
                   <div className="space-y-1.5">
-                     <label className="text-[9px] font-black uppercase text-neutral-400 tracking-widest ml-1">Medida</label>
+                     <label className="text-[9px] font-black uppercase text-black tracking-widest ml-1">Medida</label>
                      <select className="w-full bg-sand-300 rounded-xl py-2 px-3 text-xs font-bold outline-none appearance-none"
                         value={config.unit} onChange={e => setConfig({...config, unit: e.target.value})}>
                         <option value="un">Unidade</option>
@@ -1158,29 +1215,29 @@ function App() {
 
                <div className="pt-2 space-y-3">
                   {bestPriceHint && (
-                     <div className="bg-pastel-green-100 border border-pastel-green-300 text-pastel-green-800 p-2 rounded-lg text-xs font-bold text-center animate-pulse">
+                     <div className="bg-brand-100 border border-brand-100 text-pastel-green-800 p-2 rounded-lg text-xs font-bold text-center animate-pulse">
                        {bestPriceHint}
                      </div>
                   )}
-                  <p className="text-[9px] font-black uppercase text-neutral-400 tracking-widest ml-1 mb-1">Preços por Mercado:</p>
+                  <p className="text-[9px] font-black uppercase text-black tracking-widest ml-1 mb-1">Preços por Mercado:</p>
                   <div className="space-y-3">
                      {markets.map(m => (
                        <div key={m} className="bg-sand-100 p-3 rounded-xl border border-sand-400 space-y-2">
                          <div className="flex items-center justify-between">
-                           <span className="text-[10px] font-black uppercase text-neutral-900 tracking-wider font-sans">{m}</span>
+                           <span className="text-[10px] font-black uppercase text-black tracking-wider font-sans">{m}</span>
                            <button 
                              onClick={() => window.open((MARKET_SEARCH_URLS[m] || MARKET_SEARCH_URLS.Default)(selectedProduct.name), '_blank')}
-                             className="text-[9px] font-black bg-white border border-sand-400 px-2 py-1 rounded text-neutral-500 uppercase flex items-center gap-1 hover:bg-pastel-green-50 transition-colors"
+                             className="text-[9px] font-black bg-white border border-sand-400 px-2 py-1 rounded text-sand-500 uppercase flex items-center gap-1 hover:bg-brand-50 transition-colors"
                            >
                              <Search size={10} /> Buscar Preço
                            </button>
                          </div>
                          <div className="flex items-center gap-2">
                            <div className="relative flex-1">
-                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400">R$</span>
+                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-black">R$</span>
                              <input 
                                type="number" step="0.01"
-                               className="w-full bg-white border border-sand-400 rounded-lg py-2 pl-8 pr-3 text-sm font-bold outline-none focus:ring-1 ring-pastel-green-400"
+                               className="w-full bg-white border border-sand-400 rounded-lg py-2 pl-8 pr-3 text-sm font-bold outline-none focus:ring-1 ring-brand-500"
                                value={config.marketPrices[m] || ''}
                                onChange={e => setConfig({
                                  ...config, 
@@ -1208,29 +1265,29 @@ function App() {
       {/* WhatsApp Contacts Picker Modal */}
       {showContactsModal && (
          <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[300] flex flex-col justify-end sm:justify-center px-4 animate-slide-up">
-            <div className="bg-sand-200 w-full max-w-sm mx-auto sm:rounded-3xl rounded-t-3xl pt-6 pb-8 space-y-4 shadow-2xl h-[85vh] flex flex-col">
+            <div className="bg-sand-100 w-full max-w-sm mx-auto sm:rounded-3xl rounded-t-3xl pt-6 pb-8 space-y-4 shadow-2xl h-[85vh] flex flex-col">
                <div className="px-6 flex justify-between items-center shrink-0">
                   <div>
-                    <h2 className="text-xl font-black text-neutral-900">Enviar Lista</h2>
-                    <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest mt-1">
+                    <h2 className="text-xl font-black text-black">Enviar Lista</h2>
+                    <p className="text-[10px] text-sand-500 font-bold uppercase tracking-widest mt-1">
                       Selecione até 3 contatos ({selectedContacts.length}/3)
                     </p>
                   </div>
-                  <button onClick={() => setShowContactsModal(false)} className="p-2 bg-white rounded-xl text-neutral-400"><X size={20} /></button>
+                  <button onClick={() => setShowContactsModal(false)} className="p-2 bg-white rounded-xl text-black"><X size={20} /></button>
                </div>
                
                <div className="px-6 shrink-0">
                  <div className="relative">
-                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={14} />
+                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-black" size={14} />
                    <input type="text" placeholder="Buscar contato..." 
-                      className="w-full bg-white rounded-xl py-3 pl-9 pr-4 text-xs font-bold outline-none focus:ring-2 ring-pastel-green-500/50 shadow-sm"
+                      className="w-full bg-white rounded-xl py-3 pl-9 pr-4 text-xs font-bold outline-none focus:ring-2 ring-brand-500/50 shadow-sm"
                       value={contactSearchTerm} onChange={e => setContactSearchTerm(e.target.value)} />
                  </div>
                </div>
 
                <div className="flex-1 overflow-y-auto px-6 space-y-2 no-scrollbar">
                  {contactsLoading ? (
-                   <div className="flex flex-col items-center justify-center h-full text-neutral-400 gap-3">
+                   <div className="flex flex-col items-center justify-center h-full text-black gap-3">
                      <RefreshCw size={24} className="animate-spin" />
                      <p className="text-xs font-bold uppercase">Carregando Contatos...</p>
                    </div>
@@ -1243,13 +1300,13 @@ function App() {
                          <button 
                            key={contact.id} 
                            onClick={() => toggleContact(contact)}
-                           className={`w-full text-left p-3 rounded-xl flex items-center justify-between border-2 transition-all ${isSelected ? 'bg-pastel-green-50 border-pastel-green-500' : 'bg-white border-transparent'}`}
+                           className={`w-full text-left p-3 rounded-xl flex items-center justify-between border-2 transition-all ${isSelected ? 'bg-brand-50 border-brand-500' : 'bg-white border-transparent'}`}
                          >
                            <div>
-                             <p className={`text-xs font-bold ${isSelected ? 'text-pastel-green-800' : 'text-neutral-800'}`}>{contact.name}</p>
-                             <p className="text-[10px] text-neutral-400 mt-0.5">{contact.phone}</p>
+                             <p className={`text-xs font-bold ${isSelected ? 'text-pastel-green-800' : 'text-black'}`}>{contact.name}</p>
+                             <p className="text-[10px] text-black mt-0.5">{contact.phone}</p>
                            </div>
-                           <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all ${isSelected ? 'bg-pastel-green-500 text-white' : 'bg-sand-300'}`}>
+                           <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all ${isSelected ? 'bg-brand-500 text-white' : 'bg-sand-300'}`}>
                              {isSelected && <Check size={12} strokeWidth={4} />}
                            </div>
                          </button>
@@ -1276,19 +1333,19 @@ function App() {
          <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[300] flex items-center justify-center px-4 animate-slide-up">
             <div className="bg-white w-full max-w-sm rounded-[2rem] p-8 space-y-6 shadow-2xl">
                <div className="text-center space-y-2">
-                  <h2 className="text-xl font-black text-neutral-900">Salvar Lista</h2>
-                  <p className="text-xs text-neutral-400">Dê um nome para a sua lista de compras. O PDF será gerado em seguida.</p>
+                  <h2 className="text-xl font-black text-black">Salvar Lista</h2>
+                  <p className="text-xs text-black">Dê um nome para a sua lista de compras. O PDF será gerado em seguida.</p>
                </div>
                
                <input type="text" placeholder="Ex: Compras do Mês, Churrasco..." 
-                  className="w-full bg-sand-300 rounded-xl py-4 px-4 text-sm font-bold outline-none focus:ring-2 ring-pastel-green-500 text-center placeholder:text-neutral-400"
+                  className="w-full bg-sand-300 rounded-xl py-4 px-4 text-sm font-bold outline-none focus:ring-2 ring-brand-500 text-center placeholder:text-black"
                   value={listName} onChange={e => setListName(e.target.value)} autoFocus />
 
                <div className="flex gap-3">
-                  <button onClick={() => setShowFinalizeModal(false)} className="flex-1 bg-white border-2 border-sand-400 text-neutral-500 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest">
+                  <button onClick={() => setShowFinalizeModal(false)} className="flex-1 bg-white border-2 border-sand-400 text-sand-500 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest">
                      Voltar
                   </button>
-                  <button onClick={confirmFinalize} className="flex-1 bg-pastel-green-500 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium active:scale-95">
+                  <button onClick={confirmFinalize} className="flex-1 bg-brand-500 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium active:scale-95">
                      Criar Lista
                   </button>
                </div>
