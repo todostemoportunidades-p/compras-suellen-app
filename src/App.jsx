@@ -681,8 +681,11 @@ function App() {
       let realMarkets = [];
       
       try {
-        // Overpass query: find all supermarkets within 5km radius
-        const overpassQuery = `[out:json][timeout:10];(node["shop"="supermarket"](around:5000,${lat},${lng});way["shop"="supermarket"](around:5000,${lat},${lng}););out center;`;
+        // Overpass query: find supermarkets, construction depots, pharmacies, mechanics, etc.
+        const overpassQuery = `[out:json][timeout:15];(
+          node["shop"~"supermarket|doityourself|hardware|pharmacy|mechanic"](around:5000,${lat},${lng});
+          way["shop"~"supermarket|doityourself|hardware|pharmacy|mechanic"](around:5000,${lat},${lng});
+        );out center;`;
         const overpassRes = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`);
         const overpassData = await overpassRes.json();
         
