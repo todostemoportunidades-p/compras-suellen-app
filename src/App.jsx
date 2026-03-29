@@ -4,7 +4,7 @@ import {
   TrendingDown, TrendingUp, Download, History, Calendar,
   Save, X, CheckCircle2, RefreshCw, FileText, ArrowLeft,
   ShoppingBag, Clock, ChevronRight, LayoutGrid, List, PlusCircle, Share2, Copy,
-  Zap, ShieldCheck, Navigation
+  Zap, ShieldCheck, Navigation, Apple, Coffee, Beer, Bath, SprayCan
 } from 'lucide-react';
 import { Share } from '@capacitor/share';
 import { Geolocation } from '@capacitor/geolocation';
@@ -26,7 +26,8 @@ const KEYS = {
   MARKETS: 'mercado_settings_v6',
   LOCATIONS: 'mercado_locations_v6',
   LAST_SCAN: 'mercado_last_scan',
-  THEME: 'mercado_theme'
+  THEME: 'mercado_theme',
+  ACCOUNTS: 'mercado_accounts_v1',
 };
 
 // ─── UTILS ───
@@ -36,8 +37,31 @@ const normalizeStr = (str) => {
   return str ? str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 };
 
-const getProductImage = (name) => {
-  return `https://loremflickr.com/200/200/grocery,${encodeURIComponent(name.split(' ')[0])}?lock=${name.length}`;
+const CATEGORY_ASSETS = {
+  'Hortifruti': 'hortifruti.png',
+  'Açougue': 'acougue.png',
+  'Peixaria': 'acougue.png',
+  'Laticínios': 'laticinios.png',
+  'Frios': 'laticinios.png',
+  'Mercearia Alimentos Básicos': 'mercearia.png',
+  'Mercearia Enlatados & Molhos': 'mercearia.png',
+  'Mercearia Doces & Biscoitos': 'mercearia.png',
+  'Limpeza Funcional': 'limpeza.png',
+  'Higiene & Cuidados': 'limpeza.png',
+  'Bebidas': 'bebidas.png',
+  'Cosméticos': 'limpeza.png',
+  'Farmácia': 'limpeza.png',
+  'Automotivo': 'mercearia.png',
+  'Moto': 'mercearia.png',
+  'Construção': 'mercearia.png',
+  'Utilidades': 'mercearia.png',
+};
+
+const getProductImage = (product) => {
+  if (!product) return '/img/products/mercearia.png';
+  const cat = product.category || 'Outros';
+  const asset = CATEGORY_ASSETS[cat] || 'mercearia.png';
+  return `/img/products/${asset}`;
 };
 
 const MARKET_SEARCH_URLS = {
@@ -130,7 +154,7 @@ async function generatePDF(items, dateStr, total, listName) {
 function App() {
   // Core State
   const [products, setProducts] = useState([]);
-  const [markets, setMarkets] = useState(['Nagumo', 'Higas']);
+  const [markets, setMarkets] = useState([{ name: 'Nagumo', type: 'Supermercado' }, { name: 'Higas', type: 'Supermercado' }]);
   const [currentList, setCurrentList] = useState([]);
   const [historyList, setHistoryList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -141,6 +165,7 @@ function App() {
   const [activeCategory, setActiveCategory] = useState('Todas');
   const [toast, setToast] = useState(null);
   const [scanLog, setScanLog] = useState([]);
+  const [newStoreType, setNewStoreType] = useState('Supermercado');
   
   // Selection/Naming Flow State
   const [selectedProduct, setSelectedProduct] = useState(null); // The one being 'configured' to add
@@ -167,6 +192,22 @@ function App() {
 
   // Scanner State
   const [isScanning, setIsScanning] = useState(false);
+
+  // Maps State
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const routingControlRef = useRef(null);
+  const [mapLocation, setMapLocation] = useState(null);
+  const [mapMarkers, setMapMarkers] = useState([]);
+  const [mapFilter, setMapFilter] = useState('all'); // 'all', 'supermarket', 'hardware'
+  const [selectedMapDest, setSelectedMapDest] = useState(null);
+
+  // Accounts (Gerenciador de Contas) State
+  const [accounts, setAccounts] = useState([]);
+  const [newAccountEntry, setNewAccountEntry] = useState({ type: 'despesa', description: '', amount: '', category: 'Alimentação', date: new Date().toISOString().split('T')[0] });
+
+  // Inline price editing in shopping mode
+  const [editingShopItemId, setEditingShopItemId] = useState(null);
 
   // Auto-finish and confetti logic
   useEffect(() => {
@@ -196,9 +237,11 @@ function App() {
     const r = localStorage.getItem(KEYS.LAST_REFRESH);
     const s = localStorage.getItem(KEYS.LAST_SCAN);
 
-    let baseMarkets = m ? JSON.parse(m) : ['Nagumo', 'Higas'];
+    let baseMarkets = m ? JSON.parse(m) : [{ name: 'Nagumo', type: 'Supermercado' }, { name: 'Higas', type: 'Supermercado' }];
+    // Migration: convert strings to objects if necessary
+    baseMarkets = baseMarkets.map(item => typeof item === 'string' ? { name: item, type: 'Supermercado' } : item);
     setMarkets(baseMarkets);
-
+    
     let base = p ? JSON.parse(p) : baseProducts.map(prod => ({
       ...prod,
       prices: {
@@ -228,7 +271,11 @@ function App() {
     setIsScanning(true);
     try {
       // We only scan markets that have scrapers implemented (Nagumo, Higas)
-      const scanMarkets = currentMarkets.filter(m => m === 'Nagumo' || m === 'Higas');
+      const scanMarkets = (currentMarkets || []).filter(m => {
+        const name = typeof m === 'string' ? m : m.name;
+        return name === 'Nagumo' || name === 'Higas';
+      }).map(m => typeof m === 'string' ? m : m.name);
+      
       if (scanMarkets.length === 0) return;
 
       const updates = await scanAllMarkets(scanMarkets, currentProducts);
@@ -251,6 +298,206 @@ function App() {
   useEffect(() => { localStorage.setItem(KEYS.LISTS, JSON.stringify(historyList)); }, [historyList]);
   useEffect(() => { localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(products)); }, [products]);
   useEffect(() => { localStorage.setItem(KEYS.MARKETS, JSON.stringify(markets)); }, [markets]);
+  useEffect(() => { localStorage.setItem(KEYS.ACCOUNTS, JSON.stringify(accounts)); }, [accounts]);
+
+  // Load accounts from storage
+  useEffect(() => {
+    const a = localStorage.getItem(KEYS.ACCOUNTS);
+    if (a) setAccounts(JSON.parse(a));
+  }, []);
+
+  // Leaflet map initialization
+  useEffect(() => {
+    if (view !== 'maps' || !mapRef.current) return;
+    if (mapInstanceRef.current) return; // already initialized
+    const L = window.L;
+    if (!L) return;
+    const map = L.map(mapRef.current, { zoomControl: true }).setView([-23.5505, -46.6333], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
+    mapInstanceRef.current = map;
+    // Get user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const { latitude: lat, longitude: lng } = pos.coords;
+        setMapLocation({ lat, lng });
+        map.setView([lat, lng], 15);
+        const userIcon = L.divIcon({ className: '', html: '<div style="background:#3b82f6;width:16px;height:16px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.4)"></div>' });
+        L.marker([lat, lng], { icon: userIcon }).addTo(map).bindPopup('📍 Você está aqui').openPopup();
+        loadMapPOIs(map, lat, lng, mapFilter);
+      }, (err) => { console.warn('Map GPS error:', err); });
+    }
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [view === 'maps']);
+
+  const loadMapPOIs = async (map, lat, lng, filter) => {
+    const L = window.L;
+    if (!L || !map) return;
+
+    // Define categories we will query by filter
+    const typeConfig = {
+      supermarket: { label: '🛒 Mercado/Supermercado', color: '#10b981', queries: [`node["shop"="supermarket"](around:5000,${lat},${lng});`, `node["shop"="convenience"](around:5000,${lat},${lng});`] },
+      hardware: { label: '🔨 Materiais de Construção', color: '#f59e0b', queries: [`node["shop"="hardware"](around:5000,${lat},${lng});`, `node["shop"="doityourself"](around:5000,${lat},${lng});`, `node["shop"="building_materials"](around:5000,${lat},${lng});`] },
+      pharmacy: { label: '💊 Farmácia/Drogaria', color: '#ef4444', queries: [`node["amenity"="pharmacy"](around:5000,${lat},${lng});`] },
+      mechanic: { label: '🔧 Mecânica / Troca de Óleo', color: '#8b5cf6', queries: [`node["shop"="car_repair"](around:5000,${lat},${lng});`, `node["shop"="tyres"](around:5000,${lat},${lng});`] },
+      bodyshop: { label: '🚗 Funilaria / Pintura', color: '#ec4899', queries: [`node["shop"="car_parts"](around:5000,${lat},${lng});`, `node["craft"="painter"](around:5000,${lat},${lng});`] },
+      health: { label: '🏥 Hospital / Clínica', color: '#dc2626', queries: [`node["amenity"="hospital"](around:5000,${lat},${lng});`, `node["amenity"="clinic"](around:5000,${lat},${lng});`] },
+      restaurant: { label: '🍽️ Restaurante / Padaria', color: '#f97316', queries: [`node["amenity"="restaurant"](around:3000,${lat},${lng});`, `node["shop"="bakery"](around:3000,${lat},${lng});`] },
+      fuel: { label: '⛽ Posto de Combustível', color: '#0ea5e9', queries: [`node["amenity"="fuel"](around:5000,${lat},${lng});`] },
+    };
+
+    const filterToTypes = {
+      all: Object.keys(typeConfig),
+      supermarket: ['supermarket'],
+      hardware: ['hardware'],
+      pharmacy: ['pharmacy'],
+      mechanic: ['mechanic','bodyshop','fuel'],
+      health: ['health','pharmacy'],
+    };
+
+    const selectedTypes = filterToTypes[filter] || Object.keys(typeConfig);
+    let combinedQuery = '';
+    selectedTypes.forEach(t => {
+      if (typeConfig[t]) {
+        typeConfig[t].queries.forEach(q => { combinedQuery += q; });
+      }
+    });
+
+    if (!combinedQuery) return;
+
+    try {
+      const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:20];(${combinedQuery});out body;`;
+      const res = await fetch(overpassUrl);
+      const data = await res.json();
+      const elements = data.elements || [];
+
+      elements.forEach(el => {
+        if (!el.lat || !el.lon) return;
+        const tags = el.tags || {};
+        const name = tags.name || 'Estabelecimento';
+        const elType = tags.shop || tags.amenity || tags.craft || 'store';
+
+        // Find the config for this element's type
+        const matched = Object.entries(typeConfig).find(([, cfg]) =>
+          cfg.queries.some(q => q.includes(`"${elType}"`))
+        );
+        const color = matched ? matched[1].color : '#6b7280';
+        const label = matched ? matched[1].label : '📍 Estabelecimento';
+
+        // Build address string
+        const street = tags['addr:street'] || '';
+        const houseNum = tags['addr:housenumber'] || '';
+        const city = tags['addr:city'] || '';
+        const addrStr = [street && houseNum ? `${street}, ${houseNum}` : street, city].filter(Boolean).join(' - ') || 'Endereço não disponível';
+
+        const phone = tags.phone || tags['contact:phone'] || '';
+        const hours = tags.opening_hours || '';
+        const website = tags.website || tags['contact:website'] || '';
+
+        const icon = L.divIcon({
+          className: '',
+          html: `<div style="background:${color};width:14px;height:14px;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.35)"></div>`,
+          iconAnchor: [7, 7]
+        });
+
+        const safeName = name.replace(/'/g, "\\'");
+        const elId = `${el.lat}-${el.lon}`;
+        const savedPrice = mapMarkers[elId] || '';
+        
+        const popupHtml = `
+          <div style="font-family:sans-serif;min-width:190px;max-width:240px">
+            <div style="background:${color};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-12px -12px 10px -12px">
+              <b style="font-size:14px">${name}</b><br>
+              <span style="font-size:10px;opacity:0.9">${label}</span>
+            </div>
+            <p style="margin:4px 0;font-size:11px;color:#374151">📍 ${addrStr}</p>
+            ${phone ? `<p style="margin:6px 0;font-size:11px;color:#374151">📞 ${phone}</p>` : ''}
+            ${hours ? `<p style="margin:6px 0;font-size:11px;color:#374151">⏰ ${hours}</p>` : ''}
+            
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e5e7eb">
+              <p style="margin:0 0 6px 0;font-size:10px;font-weight:bold;color:#111827;text-transform:uppercase">💰 Preço do Serviço/Produto:</p>
+              <div style="display:flex;gap:6px">
+                <input id="price-${elId}" type="text" placeholder="Ex: R$ 150,00" 
+                  value="${savedPrice}"
+                  style="flex:1;font-size:11px;padding:5px 8px;border:1px solid #d1d5db;border-radius:4px;outline:none">
+                <button onclick="window.saveMapPrice('${elId}', document.getElementById('price-${elId}').value)"
+                  style="background:#059669;color:white;border:none;padding:5px 8px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:bold">Salvar</button>
+              </div>
+            </div>
+
+            <p style="margin:10px 0 0 0;font-size:11px">
+              <a href="https://www.google.com/search?q=tabela+de+preços+${encodeURIComponent(name)}+${addrStr}" target="_blank" 
+                style="display:block;text-align:center;background:#f3f4f6;color:#1d4ed8;padding:6px;border-radius:5px;text-decoration:none;font-weight:bold;margin-bottom:6px">🔍 Ver Preços no Google</a>
+            </p>
+            
+            <button onclick="window.setMapRoute(${el.lat},${el.lon},'${safeName}')"
+              style="background:#1d4ed8;color:white;border:none;width:100%;padding:8px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:bold">
+              🗺️ Fazer Rota até aqui
+            </button>
+          </div>`;
+
+        const marker = L.marker([el.lat, el.lon], { icon }).addTo(map);
+        marker.bindPopup(popupHtml, { maxWidth: 260 });
+      });
+    } catch (e) { console.warn('Overpass POI error:', e); }
+  };
+
+  // Global handler for route and price saving from map popup
+  useEffect(() => {
+    window.setMapRoute = (lat, lng, name) => {
+      setSelectedMapDest({ lat, lng, name });
+      setRouteToPoint(lat, lng);
+    };
+    window.saveMapPrice = (id, price) => {
+      setMapMarkers(prev => {
+        const updated = { ...prev, [id]: price };
+        localStorage.setItem(KEYS.LOCATIONS, JSON.stringify(updated));
+        return updated;
+      });
+      showToast('Preço salvo para este local!');
+    };
+    return () => { 
+      delete window.setMapRoute;
+      delete window.saveMapPrice; 
+    };
+  }, [mapLocation]);
+
+  // Load saved manual map prices on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(KEYS.LOCATIONS);
+    if (saved) setMapMarkers(JSON.parse(saved));
+  }, []);
+
+  const setRouteToPoint = (destLat, destLng) => {
+    const L = window.L;
+    const map = mapInstanceRef.current;
+    if (!L || !map || !mapLocation) return;
+    if (routingControlRef.current) {
+      map.removeControl(routingControlRef.current);
+    }
+    if (!L.Routing) return;
+    const control = L.Routing.control({
+      waypoints: [
+        L.latLng(mapLocation.lat, mapLocation.lng),
+        L.latLng(destLat, destLng)
+      ],
+      routeWhileDragging: false,
+      showAlternatives: true,
+      altLineOptions: { styles: [{ color: '#6b7280', weight: 3 }] },
+      lineOptions: { styles: [{ color: '#3b82f6', weight: 5 }] },
+      createMarker: () => null,
+      router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' })
+    }).addTo(map);
+    routingControlRef.current = control;
+  };
+
 
   // Auto-scan prices daily (every 12 hours)
   useEffect(() => {
@@ -291,15 +538,16 @@ function App() {
     let bestM = null;
 
     markets.forEach(m => {
-      const price = p.prices?.[m] || 0;
-      currentPrices[m] = price;
+      const mName = typeof m === 'string' ? m : m.name;
+      const price = p.prices?.[mName] || 0;
+      currentPrices[mName] = price;
       if (price > 0 && price < lowestP) {
         lowestP = price;
-        bestM = m;
+        bestM = mName;
       }
     });
 
-    if (bestM && Object.keys(currentPrices).length > 1) {
+    if (bestM && Object.keys(currentPrices).length > 0) {
       setBestPriceHint(`🔥 O melhor preço atual é no ${bestM} (${fmt.format(lowestP)})`);
     } else {
       setBestPriceHint(null);
@@ -338,7 +586,7 @@ function App() {
     setScanLog(['🚀 Iniciando varredura real de preços...']);
 
     try {
-      const allUpdates = await scanAllMarkets(markets, products, (msg) => {
+      const allUpdates = await scanAllMarkets(markets.map(m => m.name), products, (msg) => {
         setScanLog(prev => [...prev.slice(-20), msg]); // Keep last 20 messages
       });
       
@@ -692,18 +940,27 @@ function App() {
             )}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 overflow-x-auto">
           <button onClick={shareApp} title="Compartilhar App" className="p-2 rounded-lg transition-all text-black hover:text-brand-600">
-            <Share2 size={20} />
+            <Share2 size={18} />
           </button>
           <button onClick={() => setView('home')} title="Início" className={`p-2 rounded-lg transition-all ${view === 'home' ? 'bg-brand-100 text-brand-600' : 'text-black'}`}>
-            <LayoutGrid size={20} />
+            <LayoutGrid size={18} />
           </button>
           <button onClick={() => setView('history')} title="Histórico" className={`p-2 rounded-lg transition-all ${view === 'history' ? 'bg-brand-100 text-brand-600' : 'text-black'}`}>
-            <History size={20} />
+            <History size={18} />
+          </button>
+          <button onClick={() => { setView('maps'); mapInstanceRef.current = null; }} title="Mapas" className={`p-2 rounded-lg transition-all ${view === 'maps' ? 'bg-blue-100 text-blue-600' : 'text-black'}`}>
+            <MapPin size={18} />
+          </button>
+          <button onClick={() => setView('planilha')} title="Planilha de Custos" className={`p-2 rounded-lg transition-all ${view === 'planilha' ? 'bg-emerald-100 text-emerald-600' : 'text-black'}`}>
+            <FileText size={18} />
+          </button>
+          <button onClick={() => setView('contas')} title="Gerenciador de Contas" className={`p-2 rounded-lg transition-all ${view === 'contas' ? 'bg-purple-100 text-purple-600' : 'text-black'}`}>
+            <TrendingDown size={18} />
           </button>
           <button onClick={() => setView('settings')} title="Configurações" className={`p-2 rounded-lg transition-all ${view === 'settings' ? 'bg-brand-100 text-brand-600' : 'text-black'}`}>
-            <MapPin size={20} />
+            <ShieldCheck size={18} />
           </button>
         </div>
       </header>
@@ -753,7 +1010,7 @@ function App() {
                       className="w-full bg-white p-3 rounded-xl flex items-center gap-4 border border-sand-400 hover:border-brand-100 transition-all active:scale-[0.98] shadow-premium"
                     >
                       <div className="w-12 h-12 bg-sand-100 rounded-lg overflow-hidden shrink-0">
-                         <img src={getProductImage(p.name)} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
+                         <img src={getProductImage(p)} alt={p.name} className="w-full h-full object-contain" loading="lazy" />
                       </div>
                       <div className="text-left flex-1">
                         <p className="text-sm font-bold text-black">{p.name}</p>
@@ -797,7 +1054,7 @@ function App() {
                       <div key={item.id} className="bg-white rounded-xl border border-sand-400 p-4 shadow-premium group">
                         <div className="flex items-start gap-4">
                           <div className="w-14 h-14 bg-sand-100 rounded-xl overflow-hidden shrink-0 border border-sand-300">
-                             <img src={getProductImage(item.name)} alt={item.name} className="w-full h-full object-cover" />
+                             <img src={getProductImage(item)} alt={item.name} className="w-full h-full object-contain" />
                           </div>
                           <div className="flex-1">
                             <h3 className="text-sm font-bold text-black leading-tight">{item.name}</h3>
@@ -1020,23 +1277,189 @@ function App() {
              </div>
            )}
 
+           {/* ── Maps View ── */}
+           {view === 'maps' && (
+             <div className="space-y-4 animate-slide-up pb-20">
+               <div className="flex items-center justify-between">
+                 <h2 className="text-sm font-black uppercase tracking-widest text-black">🗺️ Mapa de Estabelecimentos</h2>
+               </div>
+               <div className="flex gap-2 overflow-x-auto no-scrollbar py-1">
+                 {[['all','Todos'],['supermarket','Mercados'],['hardware','Construção'],['pharmacy','Farmácias'],['mechanic','Auto/Oficinas'],['health','Saúde/Hosp.'],['restaurant','Alimentação']].map(([f,l]) => (
+                   <button key={f} onClick={() => setMapFilter(f)}
+                     className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all ${mapFilter===f?'bg-black text-white border-black':'bg-white text-black border-sand-400'}`}>{l}</button>
+                 ))}
+               </div>
+               <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-[10px] text-blue-800 font-bold">
+                 📍 Permitia a localização. Toque em um marcador e escolha "Fazer Rota" para obter direções.
+                 <br/>🟢 Mercados • 🟡 Construção/Ferragens • 🔴 Farmácias
+               </div>
+               {selectedMapDest && (
+                 <div className="bg-blue-100 border border-blue-300 rounded-xl p-3 flex items-center justify-between">
+                   <p className="text-xs font-bold text-blue-900">Rota: {selectedMapDest.name}</p>
+                   <button onClick={() => { setSelectedMapDest(null); if(routingControlRef.current && mapInstanceRef.current) { mapInstanceRef.current.removeControl(routingControlRef.current); routingControlRef.current=null; }}} className="text-[9px] font-black text-red-500 uppercase">Cancelar Rota</button>
+                 </div>
+               )}
+               <div ref={mapRef} className="w-full rounded-2xl overflow-hidden border border-sand-300 shadow-premium" style={{height:'55vh', minHeight:'320px'}} />
+             </div>
+           )}
+
+           {/* ── Planilha de Custos View ── */}
+           {view === 'planilha' && (() => {
+             const monthMap = {};
+             const catMap = {};
+             historyList.forEach(h => {
+               const month = h.date ? h.date.split('/').slice(0,2).reverse().join('/') : 'Sem data';
+               monthMap[month] = (monthMap[month] || 0) + (h.total || 0);
+               (h.items || []).forEach(it => {
+                 catMap[it.category || 'Outros'] = (catMap[it.category || 'Outros'] || 0) + (it.selectedPrice * it.qty);
+               });
+             });
+             const totalGasto = historyList.reduce((s, h) => s + (h.total || 0), 0);
+             const exportCSV = () => {
+               let csv = 'Mês,Total\n';
+               Object.entries(monthMap).forEach(([m,v]) => { csv += `"${m}",${v.toFixed(2)}\n`; });
+               csv += '\nCategoria,Total\n';
+               Object.entries(catMap).forEach(([c,v]) => { csv += `"${c}",${v.toFixed(2)}\n`; });
+               Share.share({ title:'Planilha de Custos', text:csv, dialogTitle:'Exportar CSV' }).catch(()=>{
+                 const a = document.createElement('a');
+                 a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+                 a.download='planilha_custos.csv'; a.click();
+               });
+             };
+             return (
+               <div className="space-y-5 animate-slide-up pb-20">
+                 <div className="flex items-center justify-between">
+                   <h2 className="text-sm font-black uppercase tracking-widest text-black">📊 Planilha de Custos</h2>
+                   <button onClick={exportCSV} className="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest">Exportar CSV</button>
+                 </div>
+                 <div className="bg-emerald-700 text-white rounded-2xl p-5 text-center">
+                   <p className="text-[9px] font-black uppercase tracking-widest opacity-70">Total Gasto (Histórico)</p>
+                   <p className="text-3xl font-black mt-1">{fmt.format(totalGasto)}</p>
+                   <p className="text-[10px] opacity-60 mt-1">{historyList.length} listas no histórico</p>
+                 </div>
+                 <div>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-black mb-2 px-1">Por Mês</p>
+                   <div className="bg-white rounded-xl border border-sand-400 overflow-hidden shadow-premium">
+                     {Object.entries(monthMap).length === 0 ? (
+                       <p className="p-4 text-xs text-center text-black">Nenhuma lista no histórico ainda.</p>
+                     ) : Object.entries(monthMap).sort((a,b)=>b[0].localeCompare(a[0])).map(([month, total]) => (
+                       <div key={month} className="flex items-center justify-between px-4 py-3 border-b border-sand-300 last:border-0">
+                         <span className="text-xs font-bold text-black">{month}</span>
+                         <span className="text-xs font-black text-emerald-700">{fmt.format(total)}</span>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+                 <div>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-black mb-2 px-1">Por Categoria</p>
+                   <div className="bg-white rounded-xl border border-sand-400 overflow-hidden shadow-premium">
+                     {Object.entries(catMap).length === 0 ? (
+                       <p className="p-4 text-xs text-center text-black">Nenhum dado disponível.</p>
+                     ) : Object.entries(catMap).sort((a,b)=>b[1]-a[1]).map(([cat, total]) => (
+                       <div key={cat} className="flex items-center justify-between px-4 py-3 border-b border-sand-300 last:border-0">
+                         <span className="text-xs font-bold text-black">{cat}</span>
+                         <span className="text-xs font-black text-brand-600">{fmt.format(total)}</span>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               </div>
+             );
+           })()}
+
+           {/* ── Gerenciador de Contas View ── */}
+           {view === 'contas' && (() => {
+             const totalReceitas = accounts.filter(a => a.type==='receita').reduce((s,a)=>s+(parseFloat(a.amount)||0),0);
+             const totalDespesas = accounts.filter(a => a.type==='despesa').reduce((s,a)=>s+(parseFloat(a.amount)||0),0);
+             const saldo = totalReceitas - totalDespesas;
+             const addAccount = () => {
+               if (!newAccountEntry.description || !newAccountEntry.amount) return showToast('Preencha descrição e valor.');
+               setAccounts(prev => [{ ...newAccountEntry, id: Date.now() }, ...prev]);
+               setNewAccountEntry({ type:'despesa', description:'', amount:'', category:'Alimentação', date: new Date().toISOString().split('T')[0] });
+               showToast('Lançamento adicionado!');
+             };
+             const accountCategories = ['Alimentação','Transporte','Saúde','Lazer','Educação','Casa','Salário','Freelance','Outros'];
+             return (
+               <div className="space-y-5 animate-slide-up pb-20">
+                 <h2 className="text-sm font-black uppercase tracking-widest text-black">💰 Gerenciador de Contas</h2>
+                 <div className="grid grid-cols-3 gap-3">
+                   <div className="bg-emerald-600 text-white rounded-xl p-3 text-center">
+                     <p className="text-[8px] uppercase font-black opacity-70">Receitas</p>
+                     <p className="text-sm font-black mt-0.5">{fmt.format(totalReceitas)}</p>
+                   </div>
+                   <div className="bg-red-500 text-white rounded-xl p-3 text-center">
+                     <p className="text-[8px] uppercase font-black opacity-70">Despesas</p>
+                     <p className="text-sm font-black mt-0.5">{fmt.format(totalDespesas)}</p>
+                   </div>
+                   <div className={`${saldo>=0?'bg-blue-600':'bg-orange-600'} text-white rounded-xl p-3 text-center`}>
+                     <p className="text-[8px] uppercase font-black opacity-70">Saldo</p>
+                     <p className="text-sm font-black mt-0.5">{fmt.format(saldo)}</p>
+                   </div>
+                 </div>
+                 <div className="bg-white rounded-xl border border-sand-400 p-4 shadow-premium space-y-3">
+                   <p className="text-[10px] font-black uppercase tracking-widest text-black">Novo Lançamento</p>
+                   <div className="grid grid-cols-2 gap-2">
+                     <button onClick={() => setNewAccountEntry(p=>({...p,type:'receita'}))} className={`py-2 rounded-lg text-xs font-black uppercase border transition-all ${newAccountEntry.type==='receita'?'bg-emerald-600 text-white border-emerald-600':'bg-white text-black border-sand-400'}`}>+ Receita</button>
+                     <button onClick={() => setNewAccountEntry(p=>({...p,type:'despesa'}))} className={`py-2 rounded-lg text-xs font-black uppercase border transition-all ${newAccountEntry.type==='despesa'?'bg-red-500 text-white border-red-500':'bg-white text-black border-sand-400'}`}>- Despesa</button>
+                   </div>
+                   <input type="text" placeholder="Descrição (ex: Salário, Mercado...)" className="w-full bg-sand-100 border border-sand-400 rounded-xl px-3 py-2.5 text-sm outline-none" value={newAccountEntry.description} onChange={e=>setNewAccountEntry(p=>({...p,description:e.target.value}))} />
+                   <div className="grid grid-cols-2 gap-2">
+                     <div className="relative">
+                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-black">R$</span>
+                       <input type="number" step="0.01" placeholder="0,00" className="w-full bg-sand-100 border border-sand-400 rounded-xl pl-8 pr-3 py-2.5 text-sm outline-none" value={newAccountEntry.amount} onChange={e=>setNewAccountEntry(p=>({...p,amount:e.target.value}))} />
+                     </div>
+                     <input type="date" className="w-full bg-sand-100 border border-sand-400 rounded-xl px-3 py-2.5 text-sm outline-none" value={newAccountEntry.date} onChange={e=>setNewAccountEntry(p=>({...p,date:e.target.value}))} />
+                   </div>
+                   <select className="w-full bg-sand-100 border border-sand-400 rounded-xl px-3 py-2.5 text-sm outline-none" value={newAccountEntry.category} onChange={e=>setNewAccountEntry(p=>({...p,category:e.target.value}))}>
+                     {accountCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                   </select>
+                   <button onClick={addAccount} className="w-full bg-black text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest">Adicionar</button>
+                 </div>
+                 <div>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-black mb-2 px-1">Lançamentos</p>
+                   {accounts.length === 0 ? (
+                     <div className="bg-white rounded-xl border border-sand-400 p-6 text-center"><p className="text-xs text-black">Nenhum lançamento ainda.</p></div>
+                   ) : (
+                     <div className="bg-white rounded-xl border border-sand-400 overflow-hidden shadow-premium">
+                       {accounts.map(acc => (
+                         <div key={acc.id} className={`flex items-center justify-between px-4 py-3 border-b border-sand-300 last:border-0 ${acc.type==='receita'?'bg-emerald-50':'bg-red-50/30'}`}>
+                           <div>
+                             <p className="text-xs font-bold text-black">{acc.description}</p>
+                             <p className="text-[9px] text-black/50">{acc.category} • {acc.date}</p>
+                           </div>
+                           <div className="flex items-center gap-2">
+                             <p className={`text-xs font-black ${acc.type==='receita'?'text-emerald-700':'text-red-600'}`}>{acc.type==='receita'?'+':'-'}{fmt.format(parseFloat(acc.amount)||0)}</p>
+                             <button onClick={()=>setAccounts(prev=>prev.filter(a=>a.id!==acc.id))} className="text-sand-400 hover:text-red-500"><Trash2 size={12}/></button>
+                           </div>
+                         </div>
+                       ))}
+                     </div>
+                   )}
+                 </div>
+               </div>
+             );
+           })()}
+
            {view === 'settings' && (
              <div className="space-y-6 animate-slide-up pb-20">
                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-black uppercase tracking-widest text-black">Meus Supermercados</h2>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-black">Meus Locais</h2>
                </div>
 
                <div className="bg-white rounded-xl border border-sand-400 p-6 shadow-premium space-y-4">
-                  <p className="text-xs text-black font-medium leading-relaxed">Adicione os mercados que você costuma visitar. O app permitirá comparar preços e abrir a busca de cada um.</p>
+                  <p className="text-xs text-black font-medium leading-relaxed">Gerencie seus supermercados e depósitos de construção.</p>
                   
                   <div className="space-y-2">
                     {markets.map(m => (
-                      <div key={m} className="flex items-center justify-between bg-sand-100 p-3 rounded-xl border border-sand-400">
-                        <span className="text-sm font-bold text-black">{m}</span>
+                      <div key={m.name} className="flex items-center justify-between bg-sand-100 p-3 rounded-xl border border-sand-400">
+                        <div>
+                           <span className="text-sm font-bold text-black">{m.name}</span>
+                           <span className="text-[8px] font-black uppercase text-brand-600 block">{m.type}</span>
+                        </div>
                         <button 
                           onClick={() => {
-                            if (markets.length <= 1) return showToast("Mantenha ao menos um mercado.");
-                            setMarkets(prev => prev.filter(x => x !== m));
+                            if (markets.length <= 1) return showToast("Mantenha ao menos um local.");
+                            setMarkets(prev => prev.filter(x => x.name !== m.name));
                           }}
                           className="text-red-400 hover:text-red-600 p-2"
                         >
@@ -1047,35 +1470,35 @@ function App() {
                   </div>
 
                   <div className="pt-4 border-t border-sand-400">
-                    <p className="text-[10px] font-black uppercase text-black tracking-widest mb-2 ml-1">Adicionar Novo Mercado</p>
-                    <div className="flex gap-2">
+                    <p className="text-[10px] font-black uppercase text-black tracking-widest mb-2 ml-1">Adicionar Novo Local</p>
+                    <div className="flex flex-col gap-3">
                       <input 
-                        type="text" id="newStoreInput" placeholder="Ex: Sonda, Carrefour..."
-                        className="flex-1 bg-sand-300 rounded-xl py-2.5 px-4 text-sm font-bold outline-none border border-sand-400 focus:ring-1 ring-brand-500"
-                        onKeyDown={e => {
-                          if (e.key === 'Enter') {
-                            const val = e.target.value.trim();
-                            if (!val) return;
-                            if (markets.includes(val)) return showToast("Mercado já existe.");
-                            setMarkets(prev => [...prev, val]);
-                            e.target.value = '';
-                            showToast(`${val} adicionado!`);
-                          }
-                        }}
+                        type="text" id="newStoreInput" placeholder="Ex: Sonda, Depósito Santa Rita..."
+                        className="bg-sand-300 rounded-xl py-2.5 px-4 text-sm font-bold outline-none border border-sand-400 focus:ring-1 ring-brand-500"
                       />
+                      <div className="grid grid-cols-2 gap-2">
+                        <button 
+                           onClick={() => setNewStoreType('Supermercado')}
+                           className={`py-2 rounded-lg text-xs font-black transition-all ${newStoreType === 'Supermercado' ? 'bg-black text-white' : 'bg-white text-black border border-sand-400'}`}
+                        >SUPERMERCADO</button>
+                        <button 
+                           onClick={() => setNewStoreType('Depósito')}
+                           className={`py-2 rounded-lg text-xs font-black transition-all ${newStoreType === 'Depósito' ? 'bg-black text-white' : 'bg-white text-black border border-sand-400'}`}
+                        >DEPÓSITO</button>
+                      </div>
                       <button 
                         onClick={() => {
                           const el = document.getElementById('newStoreInput');
                           const val = el.value.trim();
                           if (!val) return;
-                          if (markets.includes(val)) return showToast("Mercado já existe.");
-                          setMarkets(prev => [...prev, val]);
+                          if (markets.some(m => m.name === val)) return showToast("Local já existe.");
+                          setMarkets(prev => [...prev, { name: val, type: newStoreType }]);
                           el.value = '';
                           showToast(`${val} adicionado!`);
                         }}
-                        className="bg-black text-white px-5 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium active:scale-95"
+                        className="bg-brand-600 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium active:scale-95"
                       >
-                        Add
+                        Salvar Local
                       </button>
                     </div>
                   </div>
@@ -1138,8 +1561,8 @@ function App() {
                                 const newName = prompt("Nome do mercado nesta localização (ex: Higas):", "Meu Mercado");
                                 if (newName) {
                                   // Add to markets list
-                                  if (!markets.includes(newName)) {
-                                    setMarkets(prev => [...prev, newName]);
+                                  if (!markets.some(m => m.name === newName)) {
+                                    setMarkets(prev => [...prev, { name: newName, type: 'Supermercado' }]);
                                   }
                                   
                                   // Save coordinates locally so GPS calculates correct distance next time
@@ -1151,8 +1574,8 @@ function App() {
                                   showToast(`${newName} atualizado com sua localização EXATA!`);
                                 }
                               } else {
-                                if (!markets.includes(nm.name)) {
-                                  setMarkets(prev => [...prev, nm.name]);
+                                if (!markets.some(m => m.name === nm.name)) {
+                                  setMarkets(prev => [...prev, { name: nm.name, type: 'Supermercado' }]);
                                   showToast(`${nm.name} adicionado!`);
                                 } else {
                                   showToast(`${nm.name} já está na lista.`);
@@ -1207,7 +1630,7 @@ function App() {
           <div className="bg-white w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-8 space-y-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex flex-col items-center text-center gap-4">
                <div className="w-32 h-32 bg-sand-100 rounded-3xl overflow-hidden shadow-lg border-4 border-white">
-                  <img src={getProductImage(selectedProduct.name)} alt={selectedProduct.name} className="w-full h-full object-cover" />
+                  <img src={getProductImage(selectedProduct)} alt={selectedProduct.name} className="w-full h-full object-contain" />
                </div>
                <div className="w-full flex justify-between items-start">
                   <div className="text-left">
@@ -1251,11 +1674,14 @@ function App() {
                   <p className="text-[9px] font-black uppercase text-black tracking-widest ml-1 mb-1">Preços por Mercado:</p>
                   <div className="space-y-3">
                      {markets.map(m => (
-                       <div key={m} className="bg-sand-100 p-3 rounded-xl border border-sand-400 space-y-2">
+                       <div key={m.name} className="bg-sand-100 p-3 rounded-xl border border-sand-400 space-y-2">
                          <div className="flex items-center justify-between">
-                           <span className="text-[10px] font-black uppercase text-black tracking-wider font-sans">{m}</span>
+                           <div className="flex flex-col">
+                             <span className="text-[10px] font-black uppercase text-black tracking-wider font-sans">{m.name}</span>
+                             <span className="text-[7px] font-black uppercase text-brand-500 tracking-tighter">{m.type}</span>
+                           </div>
                            <button 
-                             onClick={() => window.open((MARKET_SEARCH_URLS[m] || MARKET_SEARCH_URLS.Default)(selectedProduct.name), '_blank')}
+                             onClick={() => window.open((MARKET_SEARCH_URLS[m.name] || MARKET_SEARCH_URLS.Default)(selectedProduct.name), '_blank')}
                              className="text-[9px] font-black bg-white border border-sand-400 px-2 py-1 rounded text-sand-500 uppercase flex items-center gap-1 hover:bg-brand-50 transition-colors"
                            >
                              <Search size={10} /> Buscar Preço
@@ -1267,15 +1693,15 @@ function App() {
                              <input 
                                type="number" step="0.01"
                                className="w-full bg-white border border-sand-400 rounded-lg py-2 pl-8 pr-3 text-sm font-bold outline-none focus:ring-1 ring-brand-500"
-                               value={config.marketPrices[m] || ''}
+                               value={config.marketPrices[m.name] || ''}
                                onChange={e => setConfig({
                                  ...config, 
-                                 marketPrices: { ...config.marketPrices, [m]: parseFloat(e.target.value) || 0 }
+                                 marketPrices: { ...config.marketPrices, [m.name]: parseFloat(e.target.value) || 0 }
                                })}
                              />
                            </div>
                            <button 
-                             onClick={() => confirmAdd(m, config.marketPrices[m] || 0)}
+                             onClick={() => confirmAdd(m.name, config.marketPrices[m.name] || 0)}
                              className="bg-black text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
                            >
                              Adicionar

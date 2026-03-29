@@ -41,8 +41,24 @@ jobs:
         working-directory: ./android
         run: ./gradlew assembleDebug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Upload APK to Google Drive
+        uses: adityak74/google-drive-upload-git-action@main
         with:
-          name: ListaDeMercado-Android-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
+          filename: android/app/build/outputs/apk/debug/app-debug.apk
+          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
+          name: ListaDeMercado-${{ github.sha }}-debug.apk
+          overwrite: "true"
+
+      - name: Send APK via Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "Build Android APK - Lista de Mercado"
+          to: todostemoportunidades@gmail.com
+          from: Compras Suellen App
+          body: "O APK (Android) foi gerado e enviado para o seu Google Drive. Segue anexo também."
+          attachments: android/app/build/outputs/apk/debug/app-debug.apk
